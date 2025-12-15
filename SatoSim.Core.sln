@@ -1,0 +1,21 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SatoSim.Core", "SatoSim.Core\SatoSim.Core.shproj", "{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SatoSim.Android", "SatoSim.Android\SatoSim.Android.csproj", "{EB00412E-A2EB-4309-B233-CFCA97999A11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SatoSim.Desktop", "SatoSim.Desktop\SatoSim.Desktop.csproj", "{0E9114BC-A3CC-4405-88F3-E08DBFEA0C51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		SatoSim|Any CPU = SatoSim|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.SatoSim|Any CPU.ActiveCfg = SatoSim|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.SatoSim|Any CPU.Build.0 = SatoSim|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.SatoSim|Any CPU.ActiveCfg = SatoSim|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.SatoSim|Any CPU.Build.0 = SatoSim|Any CPU
+		{0E9114BC-A3CC-4405-88F3-E08DBFEA0C51}.SatoSim|Any CPU.ActiveCfg = SatoSim|Any CPU
+		{0E9114BC-A3CC-4405-88F3-E08DBFEA0C51}.SatoSim|Any CPU.Build.0 = SatoSim|Any CPU
+	EndGlobalSection
+EndGlobal

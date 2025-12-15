@@ -1,0 +1,479 @@
+
+#----------------------------- Global Properties ----------------------------#
+
+/outputDir:bin/$(Platform)
+/intermediateDir:obj/$(Platform)
+/platform:Windows
+/config:
+/profile:Reach
+/compress:False
+
+#-------------------------------- References --------------------------------#
+
+
+#---------------------------------- Content ---------------------------------#
+
+#begin Fonts/DigitalSans.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/DigitalSans.spritefont
+
+#begin Fonts/GeneralFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/GeneralFont.spritefont
+
+#begin Fonts/KosugiMaru.ttf
+/copy:Fonts/KosugiMaru.ttf
+
+#begin Graphics/Effects/Blur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Graphics/Effects/Blur.fx;Graphics/Effects/Blur
+
+#begin Graphics/Effects/GaussianBlur.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/build:Graphics/Effects/GaussianBlur.fx;Graphics/Effects/GaussianBlur
+
+#begin Graphics/Gameplay/interlacer.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/interlacer.png;Graphics/Gameplay/interlacer
+
+#begin Graphics/Gameplay/Objects/g_guideLamp.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/g_guideLamp.png;Graphics/Gameplay/Objects/g_guideLamp
+
+#begin Graphics/Gameplay/Objects/n_hold_Core.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_hold_Core.png;Graphics/Gameplay/Objects/n_hold_Core
+
+#begin Graphics/Gameplay/Objects/n_hold_Overlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_hold_Overlay.png;Graphics/Gameplay/Objects/n_hold_Overlay
+
+#begin Graphics/Gameplay/Objects/n_ripple_Approach.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_ripple_Approach.png;Graphics/Gameplay/Objects/n_ripple_Approach
+
+#begin Graphics/Gameplay/Objects/n_ripple_Base.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_ripple_Base.png;Graphics/Gameplay/Objects/n_ripple_Base
+
+#begin Graphics/Gameplay/Objects/n_ripple_Core.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_ripple_Core.png;Graphics/Gameplay/Objects/n_ripple_Core
+
+#begin Graphics/Gameplay/Objects/n_ripple_Spinner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_ripple_Spinner.png;Graphics/Gameplay/Objects/n_ripple_Spinner
+
+#begin Graphics/Gameplay/Objects/n_slash_Base.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_slash_Base.png;Graphics/Gameplay/Objects/n_slash_Base
+
+#begin Graphics/Gameplay/Objects/n_slash_Core.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_slash_Core.png;Graphics/Gameplay/Objects/n_slash_Core
+
+#begin Graphics/Gameplay/Objects/n_slash_Overlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_slash_Overlay.png;Graphics/Gameplay/Objects/n_slash_Overlay
+
+#begin Graphics/Gameplay/Objects/n_stream_HandleApproach.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_HandleApproach.png;Graphics/Gameplay/Objects/n_stream_HandleApproach
+
+#begin Graphics/Gameplay/Objects/n_stream_HandleBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_HandleBase.png;Graphics/Gameplay/Objects/n_stream_HandleBase
+
+#begin Graphics/Gameplay/Objects/n_stream_HandleCore.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_HandleCore.png;Graphics/Gameplay/Objects/n_stream_HandleCore
+
+#begin Graphics/Gameplay/Objects/n_stream_HandleOverlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_HandleOverlay.png;Graphics/Gameplay/Objects/n_stream_HandleOverlay
+
+#begin Graphics/Gameplay/Objects/n_stream_PathCore.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_PathCore.png;Graphics/Gameplay/Objects/n_stream_PathCore
+
+#begin Graphics/Gameplay/Objects/n_stream_PathOverlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_PathOverlay.png;Graphics/Gameplay/Objects/n_stream_PathOverlay
+
+#begin Graphics/Gameplay/Objects/n_stream_PointBase.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_PointBase.png;Graphics/Gameplay/Objects/n_stream_PointBase
+
+#begin Graphics/Gameplay/Objects/n_stream_PointCore.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_PointCore.png;Graphics/Gameplay/Objects/n_stream_PointCore
+
+#begin Graphics/Gameplay/Objects/n_stream_PointOverlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_stream_PointOverlay.png;Graphics/Gameplay/Objects/n_stream_PointOverlay
+
+#begin Graphics/Gameplay/Objects/n_tap_Base.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_tap_Base.png;Graphics/Gameplay/Objects/n_tap_Base
+
+#begin Graphics/Gameplay/Objects/n_tap_Core.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_tap_Core.png;Graphics/Gameplay/Objects/n_tap_Core
+
+#begin Graphics/Gameplay/Objects/n_tap_Overlay.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_tap_Overlay.png;Graphics/Gameplay/Objects/n_tap_Overlay
+
+#begin Graphics/Gameplay/Objects/n_tap_Spinner.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/n_tap_Spinner.png;Graphics/Gameplay/Objects/n_tap_Spinner
+
+#begin Graphics/Gameplay/Objects/r_Center.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/r_Center.png;Graphics/Gameplay/Objects/r_Center
+
+#begin Graphics/Gameplay/Objects/r_Ripple.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/r_Ripple.png;Graphics/Gameplay/Objects/r_Ripple
+
+#begin Graphics/Gameplay/particle_hitEffect.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/particle_hitEffect.png
+
+#begin Graphics/Gameplay/progressHead.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/progressHead.png
+
+#begin Graphics/General/gradient.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/General/gradient.png
+
+#begin Graphics/Icons/ico_folderDefault.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Icons/ico_folderDefault.png;Graphics/Icons/ico_folderDefault
+
+#begin splashes.txt
+/copy:splashes.txt
+
+#begin StreamPrefabs/path0
+/copy:StreamPrefabs/path0
+
+#begin StreamPrefabs/path1
+/copy:StreamPrefabs/path1
+
+#begin StreamPrefabs/path10
+/copy:StreamPrefabs/path10
+
+#begin StreamPrefabs/path11
+/copy:StreamPrefabs/path11
+
+#begin StreamPrefabs/path12
+/copy:StreamPrefabs/path12
+
+#begin StreamPrefabs/path13
+/copy:StreamPrefabs/path13
+
+#begin StreamPrefabs/path14
+/copy:StreamPrefabs/path14
+
+#begin StreamPrefabs/path15
+/copy:StreamPrefabs/path15
+
+#begin StreamPrefabs/path16
+/copy:StreamPrefabs/path16
+
+#begin StreamPrefabs/path17
+/copy:StreamPrefabs/path17
+
+#begin StreamPrefabs/path18
+/copy:StreamPrefabs/path18
+
+#begin StreamPrefabs/path19
+/copy:StreamPrefabs/path19
+
+#begin StreamPrefabs/path2
+/copy:StreamPrefabs/path2
+
+#begin StreamPrefabs/path20
+/copy:StreamPrefabs/path20
+
+#begin StreamPrefabs/path21
+/copy:StreamPrefabs/path21
+
+#begin StreamPrefabs/path22
+/copy:StreamPrefabs/path22
+
+#begin StreamPrefabs/path23
+/copy:StreamPrefabs/path23
+
+#begin StreamPrefabs/path3
+/copy:StreamPrefabs/path3
+
+#begin StreamPrefabs/path4
+/copy:StreamPrefabs/path4
+
+#begin StreamPrefabs/path5
+/copy:StreamPrefabs/path5
+
+#begin StreamPrefabs/path6
+/copy:StreamPrefabs/path6
+
+#begin StreamPrefabs/path7
+/copy:StreamPrefabs/path7
+
+#begin StreamPrefabs/path8
+/copy:StreamPrefabs/path8
+
+#begin StreamPrefabs/path9
+/copy:StreamPrefabs/path9
+
