@@ -4,18 +4,30 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "SatoSim.Core", "SatoSim.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SatoSim.Android", "SatoSim.Android\SatoSim.Android.csproj", "{EB00412E-A2EB-4309-B233-CFCA97999A11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SatoSim.Desktop", "SatoSim.Desktop\SatoSim.Desktop.csproj", "{0E9114BC-A3CC-4405-88F3-E08DBFEA0C51}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SatoSim.Desktop", "SatoSim.Desktop\SatoSim.Desktop.csproj", "{4B054660-4551-4C2E-B96E-D83108E1F17A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FmodForFoxes.Samples.Android.Bindings", "FmodForFoxes.Samples.Android.Bindings\FmodForFoxes.Samples.Android.Bindings.csproj", "{1672A386-60B9-4CCE-8963-AEDE511AC799}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		SatoSim|Any CPU = SatoSim|Any CPU
+		Android|Any CPU = Android|Any CPU
+		Desktop|Any CPU = Desktop|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EB00412E-A2EB-4309-B233-CFCA97999A11}.SatoSim|Any CPU.ActiveCfg = SatoSim|Any CPU
-		{EB00412E-A2EB-4309-B233-CFCA97999A11}.SatoSim|Any CPU.Build.0 = SatoSim|Any CPU
-		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.SatoSim|Any CPU.ActiveCfg = SatoSim|Any CPU
-		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.SatoSim|Any CPU.Build.0 = SatoSim|Any CPU
-		{0E9114BC-A3CC-4405-88F3-E08DBFEA0C51}.SatoSim|Any CPU.ActiveCfg = SatoSim|Any CPU
-		{0E9114BC-A3CC-4405-88F3-E08DBFEA0C51}.SatoSim|Any CPU.Build.0 = SatoSim|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android|Any CPU.ActiveCfg = Android|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android|Any CPU.Build.0 = Android|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Desktop|Any CPU.ActiveCfg = Desktop|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android|Any CPU.ActiveCfg = Android|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android|Any CPU.Build.0 = Android|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop|Any CPU.ActiveCfg = Desktop|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop|Any CPU.Build.0 = Desktop|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Android|Any CPU.ActiveCfg = Android|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop|Any CPU.ActiveCfg = Desktop|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop|Any CPU.Build.0 = Desktop|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android|Any CPU.ActiveCfg = Debug|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android|Any CPU.Build.0 = Debug|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Desktop|Any CPU.ActiveCfg = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 EndGlobal

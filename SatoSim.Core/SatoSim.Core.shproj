@@ -7,8 +7,11 @@
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.Default.props"/>
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.Common.props"/>
     <PropertyGroup/>
-    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'SatoSim|AnyCPU' ">
-      <OutputPath>bin\SatoSim\</OutputPath>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Android|AnyCPU' ">
+      <OutputPath>bin\Android\</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Desktop|AnyCPU' ">
+      <OutputPath>bin\Desktop\</OutputPath>
     </PropertyGroup>
     <Import Project="SatoSim.Core.projitems" Label="Shared"/>
     <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\CodeSharing\Microsoft.CodeSharing.CSharp.targets"/>

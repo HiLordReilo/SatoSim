@@ -5,10 +5,10 @@
     "version": "0.2.0",
     "configurations": [
       {
-        "name": "C#: SatoSim.Desktop Debug",
+        "name": "C#: SatoSim.DesktopDX Debug",
         "type": "dotnet",
         "request": "launch",
-        "projectPath": "${workspaceFolder}/SatoSim.Desktop.csproj"
+        "projectPath": "${workspaceFolder}/SatoSim.DesktopDX.csproj"
       }
     ],
   }

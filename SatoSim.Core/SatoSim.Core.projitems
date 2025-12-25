@@ -10,14 +10,20 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="$(MSBuildThisFileDirectory)Data\ChartData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\ChartMetadata.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\PlayerData.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Data\PlayerState.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Game1.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\GameManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\GlobalAssetManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Managers\HitEffectManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\PlayStateManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\SettingsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\PlayfieldUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\TimingUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\TouchEventExArgs.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\TouchListenerFix.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\Utility.cs" />
   </ItemGroup>
   <ItemGroup>

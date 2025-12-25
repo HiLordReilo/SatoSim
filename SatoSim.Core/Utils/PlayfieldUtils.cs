@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using Microsoft.Xna.Framework;
 
 namespace SatoSim.Core.Utils
@@ -11,7 +12,9 @@ namespace SatoSim.Core.Utils
         public static readonly Color NoteColor_Chord1 = Color.CornflowerBlue;
         public static readonly Color NoteColor_Chord2 = Color.Yellow;
         public static readonly Color StreamStartColor = Color.Magenta;
-        public static readonly Color StreamEndColor = Color.CornflowerBlue;
+        public static readonly Color StreamEndColor = Color.Cyan;
+
+        public static float ReceptorRadius = 100f;
 
         public static List<PrefabStreamPath> StreamPrefabs = new List<PrefabStreamPath>();
         
@@ -57,7 +60,7 @@ namespace SatoSim.Core.Utils
 
             public PrefabStreamPath(string pathData)
             {
-                string[] segments = pathData.Split(';');
+                string[] segments = pathData.Replace(".", CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator).Split(';');
                 PointPositions = new Vector2[segments.Length];
                 
                 for (int s = 0; s < segments.Length; s++)
@@ -71,18 +74,18 @@ namespace SatoSim.Core.Utils
 
             public Vector2[] GetSimplifiedPath(float streamDuration, float beatDuration)
             {
-                int pointCount = (int)float.Round(streamDuration / beatDuration);
+                float pointCount = streamDuration / beatDuration * 2;
 
-                Vector2[] result = new Vector2[pointCount + 2];
+                Vector2[] result = new Vector2[(int)float.Round(pointCount + 2)];
 
                 result[0] = PointPositions[0];
                 result[^1] = PointPositions[^1];
 
-                int pointStep = (PointPositions.Length / (1 + pointCount));
+                float pointStep = PointPositions.Length / (1f + pointCount);
                 
                 for (int i = 1; i < pointCount + 1; i++)
                 {
-                    result[i] = PointPositions[pointStep * i];
+                    result[i] = PointPositions[(int)float.Floor(pointStep * i)];
                 }
 
                 return result;

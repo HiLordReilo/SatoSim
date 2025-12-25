@@ -3,7 +3,7 @@
 
 /outputDir:bin/$(Platform)
 /intermediateDir:obj/$(Platform)
-/platform:Windows
+/platform:Android
 /config:
 /profile:Reach
 /compress:False
@@ -30,6 +30,12 @@
 #begin Fonts/KosugiMaru.ttf
 /copy:Fonts/KosugiMaru.ttf
 
+#begin Fonts/Outfit-Bold.ttf
+/copy:Fonts/Outfit-Bold.ttf
+
+#begin Fonts/Outfit-Regular.ttf
+/copy:Fonts/Outfit-Regular.ttf
+
 #begin Graphics/Effects/Blur.fx
 /importer:EffectImporter
 /processor:EffectProcessor
@@ -42,6 +48,162 @@
 /processorParam:DebugMode=Auto
 /build:Graphics/Effects/GaussianBlur.fx;Graphics/Effects/GaussianBlur
 
+#begin Graphics/froze.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/froze.png
+
+#begin Graphics/Gameplay/DifficultyTierLabels.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/DifficultyTierLabels.png;Graphics/Gameplay/DifficultyTierLabels
+
+#begin Graphics/Gameplay/HitEffects/Base.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/HitEffects/Base.png
+
+#begin Graphics/Gameplay/HitEffects/Extra_RippleFlash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/HitEffects/Extra_RippleFlash.png
+
+#begin Graphics/Gameplay/HitEffects/HanteiText.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/HitEffects/HanteiText.png;Graphics/Gameplay/HitEffects/HanteiText
+
+#begin Graphics/Gameplay/HitEffects/Slash.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/HitEffects/Slash.png
+
+#begin Graphics/Gameplay/hud_ComboLabel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_ComboLabel.png;Graphics/Gameplay/hud_ComboLabel
+
+#begin Graphics/Gameplay/hud_NoteSpeed.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_NoteSpeed.png;Graphics/Gameplay/hud_NoteSpeed
+
+#begin Graphics/Gameplay/hud_NoteSpeedSliderBG.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_NoteSpeedSliderBG.png;Graphics/Gameplay/hud_NoteSpeedSliderBG
+
+#begin Graphics/Gameplay/hud_NoteSpeedSliderGauge.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_NoteSpeedSliderGauge.png;Graphics/Gameplay/hud_NoteSpeedSliderGauge
+
+#begin Graphics/Gameplay/hud_NoteSpeedUnderlayLocked.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_NoteSpeedUnderlayLocked.png;Graphics/Gameplay/hud_NoteSpeedUnderlayLocked
+
+#begin Graphics/Gameplay/hud_NoteSpeedUnderlayUnlocked.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_NoteSpeedUnderlayUnlocked.png;Graphics/Gameplay/hud_NoteSpeedUnderlayUnlocked
+
+#begin Graphics/Gameplay/hud_ScoreLabel.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_ScoreLabel.png;Graphics/Gameplay/hud_ScoreLabel
+
 #begin Graphics/Gameplay/interlacer.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -53,6 +215,30 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/Gameplay/interlacer.png;Graphics/Gameplay/interlacer
+
+#begin Graphics/Gameplay/Objects/g_guideArrow.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/g_guideArrow.png;Graphics/Gameplay/Objects/g_guideArrow
+
+#begin Graphics/Gameplay/Objects/g_guideArrowTip.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/g_guideArrowTip.png;Graphics/Gameplay/Objects/g_guideArrowTip
 
 #begin Graphics/Gameplay/Objects/g_guideLamp.png
 /importer:TextureImporter
@@ -378,6 +564,30 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Gameplay/progressHead.png
 
+#begin Graphics/General/DifficultyRatingFont.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/General/DifficultyRatingFont.png;Graphics/General/DifficultyRatingFont
+
+#begin Graphics/General/GaugeFont.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/General/GaugeFont.png;Graphics/General/GaugeFont
+
 #begin Graphics/General/gradient.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -389,6 +599,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/General/gradient.png
+
+#begin Graphics/General/ScoreFont.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/General/ScoreFont.png;Graphics/General/ScoreFont
 
 #begin Graphics/Icons/ico_folderDefault.png
 /importer:TextureImporter

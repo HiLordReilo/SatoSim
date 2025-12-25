@@ -1,16 +1,13 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using MonoGame.Extended;
 using MonoGame.Extended.Graphics;
-using MonoGame.Extended.Particles;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Xna.Framework.Input;
+using Microsoft.Xna.Framework.Input.Touch;
 
 namespace SatoSim.Core.Utils
 {
@@ -22,7 +19,15 @@ namespace SatoSim.Core.Utils
 		{
 			return new Vector2(MathF.Sin(MathHelper.ToRadians(angle)), MathF.Cos(MathHelper.ToRadians(angle)));
 		}
-
+		
+		public static Vector2 NearestPointOnLine(Vector2 linePnt, Vector2 lineDir, Vector2 pnt)
+		{
+			lineDir.Normalize();//this needs to be a unit vector
+			var v = pnt - linePnt;
+			var d = Vector2.Dot(v, lineDir);
+			return linePnt + lineDir * d;
+		}
+		
 		public static void DrawNumber(this SpriteBatch spriteBatch, MonospaceFont font, int number, Vector2 position, Color color, Vector2 wholeScale, Vector2 digitScale, Vector2 digitOrigin, float spacing, float layerDepth)
 		{
 			DrawString(spriteBatch, font, number.ToString(), position, color, wholeScale, digitScale, digitOrigin, spacing, layerDepth, new Vector2[0]);
@@ -45,7 +50,7 @@ namespace SatoSim.Core.Utils
 
 		public static void DrawString(this SpriteBatch spriteBatch, MonospaceFont font, string text, Vector2 position, Color color, Vector2 wholeScale, Vector2 characterScale, Vector2 characterOrigin, float spacing, float layerDepth, Vector2[]? offsets, TextAlignment alignment = TextAlignment.Center)
 		{
-			char[] txt = text.ToString().ToCharArray();
+			char[] txt = text.ToCharArray();
 			Vector2[] pos = new Vector2[txt.Length];
 
 			for (int i = 0; i < pos.Length; i++)
@@ -64,7 +69,7 @@ namespace SatoSim.Core.Utils
 			else
 			if(alignment == TextAlignment.Right)
 			{
-                alignmentOffset.X -= ((font.GlyphWidth * characterScale.X + spacing) * (txt.Length) - spacing * 2) * wholeScale.X;
+                alignmentOffset.X -= ((font.GlyphWidth * characterScale.X + spacing) * (txt.Length - 1)) * wholeScale.X;
             }
 
             for (int i = 0; i < text.Length; i++)
@@ -74,6 +79,20 @@ namespace SatoSim.Core.Utils
             }
 
             //spriteBatch.DrawCircle(position, 5f, 16, Color.Magenta, 5f, 0f);
+		}
+
+		public static bool IsAnyTouchInZone(this TouchCollection state, Rectangle zone)
+		{
+			foreach (TouchLocation location in state)
+				if (zone.Contains(location.Position))
+					return true;
+
+			return false;
+		}
+
+		public static bool IsCursorInZone(this MouseState state, Rectangle zone)
+		{
+			return zone.Contains(state.Position);
 		}
 
 		public static string CalculateMD5(string filename)

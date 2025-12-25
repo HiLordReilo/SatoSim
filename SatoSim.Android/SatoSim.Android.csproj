@@ -3,18 +3,29 @@
         <TargetFramework>net8.0-android</TargetFramework>
         <SupportedOSPlatformVersion>23</SupportedOSPlatformVersion>
         <OutputType>Exe</OutputType>
-        <ApplicationId>com.companyname.SatoSim.Android</ApplicationId>
+        <ApplicationId>rip.HiLord.SatoSim</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-        <Configurations>Debug;Release;SatoSim</Configurations>
+        <Configurations>Debug;Release;Android;Desktop</Configurations>
         <Platforms>AnyCPU</Platforms>
+        <AssemblyName>SatoSim</AssemblyName>
     </PropertyGroup>
     <ItemGroup>
+        <PackageReference Include="FmodForFoxes" Version="3.2.0" />
+        <PackageReference Include="FmodForFoxes.Android" Version="3.2.0" />
         <PackageReference Include="FontStashSharp.MonoGame" Version="1.5.2" />
-        <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.*"/>
+        <PackageReference Include="MonoGame.Content.Builder.Task" Version="3.8.4.1" />
         <PackageReference Include="MonoGame.Extended" Version="5.3.1" />
         <PackageReference Include="MonoGame.Extended.Content.Pipeline" Version="5.3.1" />
         <PackageReference Include="MonoGame.Framework.Android" Version="3.8.*"/>
+    </ItemGroup>
+    <ItemGroup>
+        <AndroidNativeLibrary Include="libs\armeabi-v7a\libfmodstudio.so" />
+        <AndroidNativeLibrary Include="libs\x86\libfmodstudio.so" />
+        <AndroidNativeLibrary Include="libs\arm64-v8a\libfmodstudio.so" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\FmodForFoxes.Samples.Android.Bindings\FmodForFoxes.Samples.Android.Bindings.csproj" />
     </ItemGroup>
     <Target Name="RestoreDotnetTools" BeforeTargets="CollectPackageReferences">
         <Message Text="Restoring dotnet tools (this might take a while depending on your internet speed and should only happen upon building your project for the first time, or after upgrading MonoGame, or clearing your nuget cache)" Importance="High"/>
