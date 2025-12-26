@@ -206,7 +206,7 @@ namespace SatoSim.Core.Managers
                     if(stream.IsFinished) continue;
                     
                     // Stream have ended (either timed out or reached its end)
-                    if (stream.EndTime - Position <= 0f || stream.PointsPassed >= stream.Points.Length - 1)
+                    if (stream.EndTime - Position <= -JUDGE_FINE || stream.PointsPassed >= stream.Points.Length - 1)
                     {
                         PlayerState.AddMissedStream();
                         stream.IsFinished = true;
