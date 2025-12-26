@@ -3,3 +3,12 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+fmod.dll
+fmodL.dll
+fmodstudio.dll
+fmodstudioL.dll
+fmod.jar
+libfmod.so
+libfmodL.so
+libfmodstudio.so
+libfmodstudioL.so
