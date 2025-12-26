@@ -106,6 +106,19 @@ namespace SatoSim.Core.Utils
 				}
 			}
 		}
+		
+		public static string CalculateMD5(byte[] data)
+		{
+			using (var md5 = MD5.Create())
+			{
+				using (var stream = new MemoryStream(data))
+				{
+					var hash = md5.ComputeHash(stream);
+					return BitConverter.ToString(hash).Replace("-", "").ToLowerInvariant();
+				}
+			}
+		}
+		
 		public class MonospaceFont
 		{
 			private Dictionary<char, int> _glyphIDs;

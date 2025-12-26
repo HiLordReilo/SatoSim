@@ -154,6 +154,9 @@ namespace SatoSim.Core
             // Load stream prefabs
             LoadStreamPrefabs();
             
+            // TEMPORARY: Build song database from scratch
+            RebuildSongDatabase();
+            
             // DEBUG: Load test chart
             GameManager.LoadedMetadata =
                 ChartMetadata.ParseFile(File.ReadAllText(Path.Combine(GameManager.GameDirectory, "test",
@@ -303,6 +306,12 @@ namespace SatoSim.Core
             }
         }
 
+        public static void RebuildSongDatabase()
+        {
+            SongDatabase.BuildDatabase();
+            Console.WriteLine("Song Database rebuilt.");
+        }
+        
         public static Point ScreenToCanvasSpace(Point inputLocation)
         {
             float canvasScale = (float) Graphics.GraphicsDevice.Viewport.Height / ResolutionY;
