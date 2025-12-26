@@ -103,6 +103,8 @@ namespace SatoSim.Core.Screens
         {
             Console.WriteLine("GameplayScreen out");
             
+            _songChannel.Stop();
+            
             Game1.TouchListener.TouchStarted -= Input_OnTouchStarted;
             Game1.TouchListener.TouchMoved -= Input_OnTouchMoved;
             Game1.TouchListener.TouchEnded -= Input_OnTouchEnded;
