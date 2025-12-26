@@ -749,7 +749,7 @@ namespace SatoSim.Core.Screens
         {
             if (stream.StartTime - _stateManager.Position > _stateManager.BeatDuration * 2f) return;
             // DEBUG: Hide notes
-            if (stream.EndTime - _stateManager.Position <= -0f) return;
+            if (stream.EndTime - _stateManager.Position <= -TimingUtils.JUDGE_FINE) return;
             if (stream.Points.Length == 0) return;
             if (stream.PointsPassed >= stream.Points.Length - 1) return;
 
@@ -757,10 +757,13 @@ namespace SatoSim.Core.Screens
             float streamThickness = 0.33f;
 
             float timeToNote = stream.StartTime - _stateManager.Position;
+            float timeToNoteEnd = stream.EndTime - _stateManager.Position;
             float noteProgress = ((_stateManager.BeatDuration * 2f - timeToNote) / _stateManager.BeatDuration) / 2f;
             float noteFadeIn = Math.Clamp(noteProgress / 0.2f, 0f, 1f);
             float coreFadeIn = Math.Clamp((noteProgress - 0.5f) / 0.5f, 0f, 1f);
 
+            float timeOut = 1f - Math.Clamp((TimingUtils.JUDGE_FINE - timeToNoteEnd) / TimingUtils.JUDGE_FINE, 0f, 1f);
+            
             // Handle variables
             float handleRot;
             Vector2 handlePos1;
@@ -788,16 +791,16 @@ namespace SatoSim.Core.Screens
             
             // Handle rendering
             _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:BASE"], handlePos, null,
-                Color.White * noteFadeIn, handleRot,
+                Color.White * noteFadeIn * timeOut, handleRot,
                 GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:BASE"].Bounds.Size.ToVector2() *
                 handleOriginMultiplier, Vector2.One * (1.2f - noteFadeIn * 0.2f), SpriteEffects.None, 0.84f);
             _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:CORE"], handlePos, null,
-                Color.White * noteFadeIn, handleRot,
+                Color.White * noteFadeIn * timeOut, handleRot,
                 GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:CORE"].Bounds.Size.ToVector2() *
                 handleOriginMultiplier * new Vector2(coreFadeIn, 1f),
                 Vector2.One * MathHelper.Clamp(noteProgress * coreFadeIn, 0f, 1f), SpriteEffects.None, 0.85f);
             _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:OVERLAY"], handlePos, null,
-                Color.White * noteFadeIn, handleRot,
+                Color.White * noteFadeIn * timeOut, handleRot,
                 GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:OVERLAY"].Bounds.Size.ToVector2() *
                 handleOriginMultiplier, Vector2.One * (1.2f - noteFadeIn * 0.2f), SpriteEffects.None, 0.86f);
             
@@ -838,11 +841,11 @@ namespace SatoSim.Core.Screens
 
                 // Line
                 _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:PATH:CORE"], segPos,
-                    null, segmentCol * noteFadeIn, rotation,
+                    null, segmentCol * noteFadeIn * timeOut, rotation,
                     GlobalAssetManager.GlobalTextures["n_Stream:PATH:CORE"].Bounds.Center.ToVector2() * Vector2.UnitY,
                     coreScale, SpriteEffects.None, 0.81f);
                 _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:PATH:OVERLAY"], segPos,
-                    null, Color.White * noteFadeIn, rotation,
+                    null, Color.White * noteFadeIn * timeOut, rotation,
                     GlobalAssetManager.GlobalTextures["n_Stream:PATH:OVERLAY"].Bounds.Center.ToVector2() *
                     Vector2.UnitY,
                     overlayScale, SpriteEffects.None, 0.82f);
@@ -852,13 +855,13 @@ namespace SatoSim.Core.Screens
                 {
                     // Base
                     _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:POINT:BASE"],
-                        stream.Points[i].Position, null, Color.White * noteFadeIn, rotation,
+                        stream.Points[i].Position, null, Color.White * noteFadeIn * timeOut, rotation,
                         GlobalAssetManager.GlobalTextures["n_Stream:POINT:BASE"].Bounds.Center.ToVector2(),
                         Vector2.One * (1f - 0.25f * totalProgress), SpriteEffects.None, 0.8f);
                     
                     // Core
                     _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:POINT:CORE"],
-                        stream.Points[i].Position, null, segmentCol * noteFadeIn, rotation,
+                        stream.Points[i].Position, null, segmentCol * noteFadeIn * timeOut, rotation,
                         GlobalAssetManager.GlobalTextures["n_Stream:POINT:CORE"].Bounds.Center.ToVector2(),
                         Vector2.One * (1f - 0.25f * totalProgress), SpriteEffects.None, 0.83f);
                 }
@@ -869,13 +872,13 @@ namespace SatoSim.Core.Screens
                 {
                     // Base
                     _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:POINT:BASE"],
-                        stream.Points[i + 1].Position, null, Color.White * noteFadeIn, rotation,
+                        stream.Points[i + 1].Position, null, Color.White * noteFadeIn * timeOut, rotation,
                         GlobalAssetManager.GlobalTextures["n_Stream:POINT:BASE"].Bounds.Center.ToVector2(),
                         Vector2.One * 0.75f, SpriteEffects.None, 0.8f);
                     
                     // Core
                     _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:POINT:CORE"],
-                        stream.Points[i + 1].Position, null, StreamEndColor * noteFadeIn, rotation,
+                        stream.Points[i + 1].Position, null, StreamEndColor * noteFadeIn * timeOut, rotation,
                         GlobalAssetManager.GlobalTextures["n_Stream:POINT:CORE"].Bounds.Center.ToVector2(),
                         Vector2.One * 0.75f, SpriteEffects.None, 0.83f);
                 }
