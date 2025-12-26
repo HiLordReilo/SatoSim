@@ -13,13 +13,6 @@
 
 #---------------------------------- Content ---------------------------------#
 
-#begin Fonts/DigitalSans.spritefont
-/importer:FontDescriptionImporter
-/processor:FontDescriptionProcessor
-/processorParam:PremultiplyAlpha=True
-/processorParam:TextureFormat=Compressed
-/build:Fonts/DigitalSans.spritefont
-
 #begin Fonts/GeneralFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
@@ -35,18 +28,6 @@
 
 #begin Fonts/Outfit-Regular.ttf
 /copy:Fonts/Outfit-Regular.ttf
-
-#begin Graphics/Effects/Blur.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Graphics/Effects/Blur.fx;Graphics/Effects/Blur
-
-#begin Graphics/Effects/GaussianBlur.fx
-/importer:EffectImporter
-/processor:EffectProcessor
-/processorParam:DebugMode=Auto
-/build:Graphics/Effects/GaussianBlur.fx;Graphics/Effects/GaussianBlur
 
 #begin Graphics/froze.png
 /importer:TextureImporter
