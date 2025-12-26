@@ -160,13 +160,25 @@ namespace SatoSim.Core.Managers
                     Position += gameTime.GetElapsedSeconds();
                 else
                 {
-                    if (_lastSongPos == _scene.GetSongTime())
-                        Position += gameTime.GetElapsedSeconds();
-                    else
+                    switch (SettingsManager.ChartPositionMode)
                     {
-                        Position = _scene.GetSongTime() - _songOffset;
-                        _lastSongPos = _scene.GetSongTime();
+                        case SettingsManager.PositionMode.Synchronized:
+                            Position = _scene.GetSongTime() - _songOffset;
+                            break;
+                        case SettingsManager.PositionMode.SynchronizedSmoothed:
+                            if (_lastSongPos == _scene.GetSongTime())
+                                Position += gameTime.GetElapsedSeconds();
+                            else
+                            {
+                                Position = _scene.GetSongTime() - _songOffset;
+                                _lastSongPos = _scene.GetSongTime();
+                            }
+                            break;
+                        case SettingsManager.PositionMode.Parallel:
+                            Position += gameTime.GetElapsedSeconds();
+                            break;
                     }
+
                 }
                 
                 // Check if current note batch was missed
