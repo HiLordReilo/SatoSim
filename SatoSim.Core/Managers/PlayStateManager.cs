@@ -364,7 +364,7 @@ namespace SatoSim.Core.Managers
                         int judge = NoteBatches[NoteBatchesPassed + b].ProcessNote(n, Position);
                         
                         // If the note is Long or Slash, we suspend the note and judgment
-                        if (NoteBatches[NoteBatchesPassed + b].Notes[n].SlashFlag ||
+                        if (NoteBatches[NoteBatchesPassed + b].Notes[n].ObjectType == 1 ||
                             NoteBatches[NoteBatchesPassed + b].Notes[n].HoldFlag)
                         {
                             SuspendedNotes[recDist.Item1] = new NoteBatch(NoteBatches[NoteBatchesPassed + b].Notes[n],
