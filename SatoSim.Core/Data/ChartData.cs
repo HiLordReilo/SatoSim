@@ -65,7 +65,7 @@ public class ChartData
                 if (FreeformStreamFlag)
                     return 4; // Freeform Stream point
                 
-                if (Position1 >= 8)
+                if (Position1 >= 8 && !HoldFlag)
                     return 2; // Ripple note
                 
                 if (SlashFlag)
