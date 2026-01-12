@@ -459,11 +459,11 @@ namespace SatoSim.Core.Managers
             foreach (StreamObject stream in Streams)
             {
                 // Stream have ended (either timed out or reached its end) or is already finished - skip
-                if (stream.EndTime - Position <= 0f || stream.PointsPassed >= stream.Points.Length - 1 ||
+                if (stream.EndTime - Position <= -JUDGE_FINE || stream.PointsPassed >= stream.Points.Length - 1 ||
                     stream.IsFinished) continue;
                 
                 // Stream is too far ahead - break out
-                if(stream.StartTime - Position > JUDGE_FANTASTIC) break;
+                if(stream.StartTime - Position > JUDGE_FINE) break;
                 
                 int p1 = (int)stream.PointsPassed;
                 int p2 = (int)stream.PointsPassed + 1;
