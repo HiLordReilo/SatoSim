@@ -11,7 +11,7 @@ namespace SatoSim.Core.Data
 {
     public static class SongDatabase
     {
-        public static DbDirectory RootDirectory;
+        public static DbDirectory RootDirectory { get; private set; }
 
         public class DbEntry
         {
@@ -26,7 +26,9 @@ namespace SatoSim.Core.Data
 
         public class DbDirectory : DbEntry
         {
+            public string DirectoryName;
             public DbEntry[] SubEntries;
+            public bool UseCustomIcon;
         }
 
         public static void BuildDatabase()
@@ -37,7 +39,7 @@ namespace SatoSim.Core.Data
             RootDirectory = CreateDbDirectory(rootPath);
         }
 
-        public static DbEntry GetEntry(ref Queue<int> hierarchyPosition)
+        public static DbEntry GetEntry(ref Stack<int> hierarchyPosition)
         {
             DbEntry result = RootDirectory;
             
@@ -53,7 +55,9 @@ namespace SatoSim.Core.Data
         {
             DbDirectory result = new DbDirectory()
             {
-                Path = path
+                Path = path,
+                DirectoryName = path.Substring(path.LastIndexOf(Path.DirectorySeparatorChar) + 1),
+                UseCustomIcon = false
             };
             
             string[] subDirs = Directory.GetDirectories(path);
@@ -76,6 +80,9 @@ namespace SatoSim.Core.Data
                 // Loop through files in that directory
                 foreach (string file in Directory.GetFiles(dir))
                 {
+                    // Check if we're not using custom icon for that directory and if we should use one.
+                    if (!result.UseCustomIcon && file == ".dirIcon") result.UseCustomIcon = true;
+                    
                     // We're looking for metadata files.
                     if(!file.EndsWith(".meta")) continue;
 
@@ -85,9 +92,16 @@ namespace SatoSim.Core.Data
                         string plainText = Encoding.Default.GetString(rawData);
 
                         ChartMetadata meta = ChartMetadata.ParseFile(plainText);
+
+                        byte[] chartData = [];
                         
+                        if (meta.ChartSpecified)
+                        {
+                            chartData = File.ReadAllBytes(Path.Combine(dir, meta.ChartFilename));
+                        }
+                        
+                        hashes.Add(Utility.CalculateMD5(chartData));
                         charts.Add(meta);
-                        hashes.Add(Utility.CalculateMD5(rawData));
                     }
                     catch (Exception e)
                     {
@@ -99,8 +113,22 @@ namespace SatoSim.Core.Data
                 // Charts were found. Add a song entry into entries list and continue onto the next directory.
                 if (charts.Count > 0)
                 {
-                    song.Charts = charts.ToArray();
-                    song.ChartMD5Hashes = hashes.ToArray();
+                    Tuple<ChartMetadata, string>[] chartsHashes = new Tuple<ChartMetadata, string>[charts.Count];
+                    for (int i = 0; i < charts.Count; i++)
+                    {
+                        chartsHashes[i] = new Tuple<ChartMetadata, string>(charts[i], hashes[i]);
+                    }
+
+                    chartsHashes = chartsHashes.OrderBy(x => x.Item1.Difficulty).ToArray();
+
+                    song.Charts = new ChartMetadata[charts.Count];
+                    song.ChartMD5Hashes = new string[hashes.Count];
+                    for (int i = 0; i < charts.Count; i++)
+                    {
+                        song.Charts[i] = chartsHashes[i].Item1;
+                        song.ChartMD5Hashes[i] = chartsHashes[i].Item2;
+                    }
+                    
                     songEntries.Add(song);
                     continue;
                 }
