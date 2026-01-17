@@ -162,7 +162,8 @@ namespace SatoSim.Core.Managers
             public override void Draw(GameTime gameTime)
             {
                 SpriteBatch.Draw(BaseTexture, _position, null, _color * (0.5f - _progress), 0f, Vector2.One * 256f,
-                    Vector2.One * (0.25f + _progress * 0.25f),
+                    Vector2.One * (0.25f + _progress * 0.25f) *
+                    (_judgmentId is JUDGE_ID_E_FINE or JUDGE_ID_L_FINE ? 0.6f : 1f),
                     SpriteEffects.None, 1f);
                 SpriteBatch.Draw(BaseTexture, _position, null, _color * (0.5f - _progress), 0f, Vector2.One * 256f,
                     Vector2.One * (0.25f - _progress * 0.25f),
@@ -172,7 +173,8 @@ namespace SatoSim.Core.Managers
                     SpriteBatch.Draw(SlashTexture, _position, null, Color.LightYellow * (0.5f - _progress * 3f),
                         _rotation,
                         Vector2.One * 256f,
-                        Vector2.One * (1.3f - _progress * 0.25f),
+                        Vector2.One * (1.3f - _progress * 0.25f) *
+                        (_judgmentId is JUDGE_ID_E_FINE or JUDGE_ID_L_FINE ? 0.6f : 1f),
                         SpriteEffects.None, 1f);
                 
                 _progress += gameTime.GetElapsedSeconds() * 3f;
@@ -196,10 +198,12 @@ namespace SatoSim.Core.Managers
             public override void Draw(GameTime gameTime)
             {
                 SpriteBatch.Draw(BaseTexture, _position, null, _color * (1f - _progress * 3f), 0f, Vector2.One * 256f,
-                    Vector2.One * (0.25f + _progress * 0.25f),
+                    Vector2.One * (0.25f + _progress * 0.25f) *
+                    (_judgmentId is JUDGE_ID_E_FINE or JUDGE_ID_L_FINE ? 0.6f : 1f),
                     SpriteEffects.None, 1f);
                 SpriteBatch.Draw(BaseTexture, _position, null, _color * (1f - _progress * 3f), 0f, Vector2.One * 256f,
-                    Vector2.One * (0.25f - _progress * 0.25f),
+                    Vector2.One * (0.25f - _progress * 0.25f) *
+                    (_judgmentId is JUDGE_ID_E_FINE or JUDGE_ID_L_FINE ? 0.6f : 1f),
                     SpriteEffects.None, 1f);
 
                 if (_judgmentId == JUDGE_ID_FANTASTIC)
