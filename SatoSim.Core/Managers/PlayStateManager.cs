@@ -500,11 +500,10 @@ namespace SatoSim.Core.Managers
 
                     if (newVal > stream.PointsPassed)
                     {
-                        stream.Inertia = float.Max(stream.Inertia, Vector2.Distance(touchPos, lastPos) * 0.2f);
+                        // TODO: Implement proper inertia calculation
+                        stream.Inertia = float.Max(stream.Inertia, Vector2.Distance(touchPos, lastPos) / segLen * SettingsManager.Debug_StreamInertiaMultiplier);
                         stream.PointsPassed = newVal;
                     }
-                    
-                    //stream.IsFinished = stream.PointsPassed >= stream.Points.Length - 1;
                 }
             }
         }
