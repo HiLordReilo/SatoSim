@@ -8,6 +8,7 @@ namespace SatoSim.Core.Managers
     {
         public static string GameDirectory;
         public static ChartData LoadedChart;
+        public static string LoadedMD5;
         public static ChartMetadata LoadedMetadata;
         public static Texture2D LoadedJacket;
         public static Sound LoadedSong;
