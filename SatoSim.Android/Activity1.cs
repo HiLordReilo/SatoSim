@@ -32,8 +32,8 @@ namespace SatoSim.Android
             base.OnCreate(bundle);
 
             // Setup game directory
-            GameDirectory = Path.Combine("/storage/emulated/0/", "Directory");
-            //if (!Directory.Exists(GameDirectory)) Directory.CreateDirectory(GameDirectory);
+            GameDirectory = Path.Combine("/storage/emulated/0/", "SatoSim");
+            if (!Directory.Exists(GameDirectory)) Directory.CreateDirectory(GameDirectory);
             
             _game = new Game1(new AndroidNativeFmodLibrary());
             _view = _game.Services.GetService(typeof(View)) as View;
