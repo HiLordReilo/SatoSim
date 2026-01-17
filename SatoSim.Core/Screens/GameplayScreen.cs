@@ -95,8 +95,6 @@ namespace SatoSim.Core.Screens
             _bgDim = (float)GameManager.ActivePlayer.Options["PLAY_BackgroundDim"];
             
             _stateManager = new PlayStateManager(this, _songOffset);
-            
-            base.Initialize();
         }
 
         public override void Dispose()
@@ -105,11 +103,11 @@ namespace SatoSim.Core.Screens
             
             _songChannel.Stop();
             
+            _spriteBatch.Dispose();
+            
             Game1.TouchListener.TouchStarted -= Input_OnTouchStarted;
             Game1.TouchListener.TouchMoved -= Input_OnTouchMoved;
             Game1.TouchListener.TouchEnded -= Input_OnTouchEnded;
-            
-            base.Dispose();
         }
 
         private void Input_OnTouchStarted(object sender, TouchEventArgs e) =>
@@ -163,8 +161,6 @@ namespace SatoSim.Core.Screens
 
                 _jacketOrigin = GameManager.LoadedJacket.Bounds.Center.ToVector2();
             }
-            
-            base.LoadContent(); 
         }
 
         public override void Update(GameTime gameTime)
@@ -377,7 +373,8 @@ namespace SatoSim.Core.Screens
                 _spriteBatch.Draw(_atl_DifficultyLabels[(int)GameManager.LoadedMetadata.Difficulty - 1],
                     _pos_HUD_DifficultyTier, Color.White * 0.5f, 0f, Vector2.Zero, Vector2.One * 0.5f,
                     SpriteEffects.None, 0.5f);
-                _spriteBatch.DrawString(GlobalAssetManager.DifficultyRatingFont, GameManager.LoadedMetadata.RatingString,
+                _spriteBatch.DrawString(GlobalAssetManager.DifficultyRatingFont,
+                    GameManager.LoadedMetadata.RatingString,
                     _pos_HUD_DifficultyRating,
                     diffRateCol * 0.5f, Vector2.One * 0.5f, Vector2.One, Vector2.Zero,
                     -52f, 1f, null,
@@ -395,6 +392,14 @@ namespace SatoSim.Core.Screens
                     new Color(0xFF1B1B1B), layerDepth: 0.97f);
 
                 //_stateManager.DebugDraw(_spriteBatch);
+                if (SettingsManager.Debug_ShowDeviation)
+                {
+                    string devStr = (int)float.Round(_stateManager.PlayerState.AverageTiming * 1000f) + "ms";
+                    _spriteBatch.DrawString(GlobalAssetManager.GeneralFont, devStr,
+                        _screenCenter + Vector2.UnitY * 300f, Color.White * 0.5f, 0f,
+                        GlobalAssetManager.GeneralFont.MeasureString(devStr) / 2f, Vector2.One, SpriteEffects.None, 1f);
+                }
+
             }
             _spriteBatch.End();
         }

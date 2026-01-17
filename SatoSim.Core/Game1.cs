@@ -10,9 +10,11 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Extended;
 using MonoGame.Extended.Content;
+using MonoGame.Extended.Graphics;
 using MonoGame.Extended.Input;
 using MonoGame.Extended.Input.InputListeners;
 using MonoGame.Extended.Screens;
+using MonoGame.Extended.Screens.Transitions;
 using SatoSim.Core.Data;
 using SatoSim.Core.Managers;
 using SatoSim.Core.Screens;
@@ -24,15 +26,15 @@ namespace SatoSim.Core
     {
         public static Random RandomGenerator;
         public static GraphicsDeviceManager Graphics;
-        public static FMOD.System SoundSystem;
         
-        private readonly ScreenManager _screenManager;
+        public static readonly ScreenManager ScreenManager = new ScreenManager();
+        
         private SpriteBatch _spriteBatch;
 
         private INativeFmodLibrary _fmodLibrary;
         
         private static RenderTarget2D _gameCanvas;
-        private Texture2D _froze;
+        public static float CanvasScale { get; private set; }
 
         private float _elapsedUpdateTime;
 
@@ -54,8 +56,6 @@ namespace SatoSim.Core
             Window.AllowUserResizing = true;
 
             Window.Title = "SatoSim";
-            
-            _screenManager = new ScreenManager();
             
             RandomGenerator = new Random((int)DateTime.Now.Ticks);
 
@@ -157,29 +157,28 @@ namespace SatoSim.Core
             // TEMPORARY: Build song database from scratch
             RebuildSongDatabase();
             
-            // DEBUG: Load test chart
-            GameManager.LoadedMetadata =
-                ChartMetadata.ParseFile(File.ReadAllText(Path.Combine(GameManager.GameDirectory, "test",
-                    "beast.meta")));
-            GameManager.LoadedChart = ChartData.ParsePLY(File.ReadAllBytes(Path.Combine(GameManager.GameDirectory,
-                "test", GameManager.LoadedMetadata.ChartFilename)));
-            if (GameManager.LoadedMetadata.JacketSpecified)
-                GameManager.LoadedJacket = Texture2D.FromFile(GraphicsDevice, Path.Combine(GameManager.GameDirectory,
-                    "test", GameManager.LoadedMetadata.JacketFilename));
-            if (GameManager.LoadedMetadata.SongSpecified)
+            // TEMPORARY: Load temporary options
             {
-                string songPath = Path.Combine(GameManager.GameDirectory, "test",
-                    GameManager.LoadedMetadata.SongFilename);
-                byte[] songData = File.ReadAllBytes(songPath);
+                string[] opts = ["1.7", "0", "0.6", "1", "false", "true", "1.5", "test", "beast.meta"];
                 
-                GameManager.LoadedSong = CoreSystem.LoadSound(songData);
-            }
+                string optsPath = Path.Combine(GameManager.GameDirectory, "test_opts.txt");
+                
+                if(!File.Exists(optsPath))
+                    File.WriteAllLines(optsPath, opts);
+                else 
+                    opts = File.ReadAllLines(optsPath);
 
-            _froze = Content.Load<Texture2D>("Graphics/froze");
-            
+                GameManager.ActivePlayer.Options["PLAY_NoteSpeed"] = float.Parse(opts[0]);
+                GameManager.ActivePlayer.Options["SOUND_SongOffset"] = float.Parse(opts[1]);
+                GameManager.ActivePlayer.Options["PLAY_BackgroundDim"] = float.Parse(opts[2]);
+                SettingsManager.ChartPositionMode = (SettingsManager.PositionMode)int.Parse(opts[3]);
+                SettingsManager.ShowFPS = bool.Parse(opts[4]);
+                SettingsManager.Debug_ShowDeviation = bool.Parse(opts[5]);
+                SettingsManager.Debug_StreamInertiaMultiplier = float.Parse(opts[6]);
+            }
             
             // Load base screen
-            _screenManager.ShowScreen(new GameplayScreen(this));
+            ScreenManager.ShowScreen(new SongSelectScreen(this), new FadeTransition(GraphicsDevice, Color.White, 2f));
         }
 
         protected override void Update(GameTime gameTime)
@@ -190,24 +189,7 @@ namespace SatoSim.Core
             _elapsedUpdateTime = gameTime.GetElapsedSeconds();
             
             _inputListenerComponent.Update(gameTime);
-            _screenManager.Update(gameTime);
-            
-            // DEBUG: Reload scene
-            if (KeyboardExtended.GetState().WasKeyPressed(Keys.F5))
-                _screenManager.ReplaceScreen(new GameplayScreen(this));
-            
-            // DEBUG: Log out touches
-            // foreach (TouchLocation location in TouchPanel.GetState())
-            // {
-            //     if (location.State == TouchLocationState.Pressed)
-            //     {
-            //         Console.WriteLine("PRESSED");
-            //     }
-            //
-            //     location.TryGetPreviousLocation(out var prev);
-            //     if (prev.State != location.State)
-            //         Console.WriteLine(prev.State + " -> " + location.State);
-            // }
+            ScreenManager.Update(gameTime);
             
             base.Update(gameTime);
         }
@@ -217,42 +199,26 @@ namespace SatoSim.Core
             GraphicsDevice.Clear(Color.Magenta);
             
             GraphicsDevice.SetRenderTarget(_gameCanvas);
-            _screenManager.Draw(gameTime);
+            ScreenManager.Draw(gameTime);
             GraphicsDevice.SetRenderTarget(null);
 			
-            float canvasScale = (float)GraphicsDevice.Viewport.Height / _gameCanvas.Height;
-            if (_gameCanvas.Width * canvasScale > GraphicsDevice.Viewport.Width)
-                canvasScale *= GraphicsDevice.Viewport.Width / (_gameCanvas.Width * canvasScale);
+            CanvasScale = (float)GraphicsDevice.Viewport.Height / _gameCanvas.Height;
+            if (_gameCanvas.Width * CanvasScale > GraphicsDevice.Viewport.Width)
+                CanvasScale *= GraphicsDevice.Viewport.Width / (_gameCanvas.Width * CanvasScale);
 			
             _spriteBatch.Begin();
-            _spriteBatch.Draw(_gameCanvas, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), null, Color.White, 0, _gameCanvas.Bounds.Center.ToVector2(), canvasScale, SpriteEffects.None, 1f);
-            _spriteBatch.End();
-            
-            _spriteBatch.Begin();
             {
-                if (_screenManager.ActiveScreen == null)
+                _spriteBatch.Draw(_gameCanvas, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), null, Color.White, 0, _gameCanvas.Bounds.Center.ToVector2(), CanvasScale, SpriteEffects.None, 1f);
+                
+                if (ScreenManager.ActiveScreen == null)
                     _spriteBatch.DrawString(GlobalAssetManager.GeneralFont, "No active screen.", Vector2.One * 32f,
                         Color.White);
-
-                // _spriteBatch.DrawRectangle(0, 0, GraphicsDevice.Adapter.CurrentDisplayMode.Width,
-                //     GraphicsDevice.Adapter.CurrentDisplayMode.Height, Color.Red, 3f, 1f);
                 
                 // Draw current framerate (if enabled in settings)
                 if (SettingsManager.ShowFPS)
-                    _spriteBatch.DrawString(GlobalAssetManager.GeneralFont, $"FPS: { 1f / gameTime.GetElapsedSeconds() } \nTPS: { 1f / _elapsedUpdateTime }", Vector2.One * 8f, Color.Red);
-                
-                // for (var t = 0; t < TouchListener.CurrentState.Count; t++)
-                // {
-                //     var location = TouchListener.CurrentState[t];
-                //     Point pos = ScreenToCanvasSpace(location.Position.ToPoint());
-                //     _spriteBatch.DrawString(GlobalAssetManager.GeneralFont,
-                //         $"[TouchID: {location.Id}] Loc: {pos.X} : {pos.Y} (State: {location.State})",
-                //         Vector2.One * 8f + Vector2.UnitY * 64f + Vector2.UnitY * 16f * t, Color.Red);
-                // }
-                
-                // RGM BUILD EXCLUSIVE
-                // _spriteBatch.Draw(_froze, _gameCanvas.Bounds.Size.ToVector2() * canvasScale, null, Color.White * 0.33f, 0,
-                //     _froze.Bounds.Size.ToVector2(), 1f, SpriteEffects.None, 1f);
+                    _spriteBatch.DrawString(GlobalAssetManager.GeneralFont,
+                        $"FPS: {1f / gameTime.GetElapsedSeconds()} \nTPS: {1f / _elapsedUpdateTime}", Vector2.One * 8f,
+                        Color.Red);
             }
             _spriteBatch.End();
 			
@@ -295,8 +261,6 @@ namespace SatoSim.Core
 
         public void LoadStreamPrefabs()
         {
-            //string prefabsPath = Path.Combine(AppContext.BaseDirectory, Content.RootDirectory, "StreamPrefabs");
-            
             for (int i = 0; i < 24; i++)
             {
                 using (StreamReader reader = new StreamReader(TitleContainer.OpenStream($"Content/StreamPrefabs/path{i}")))
