@@ -6,6 +6,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input.Touch;
 using MonoGame.Extended;
 using MonoGame.Extended.Input;
+using MonoGame.Extended.Screens.Transitions;
 using SatoSim.Core.Data;
 using SatoSim.Core.Screens;
 using SatoSim.Core.Utils;
@@ -552,6 +553,18 @@ namespace SatoSim.Core.Managers
         {
             for(int i = 0; i < 15; i++)
                 batch.DrawCircle(GetPlayfieldAnchorPosition(i), ReceptorRadius, 32, _hoveredReceptors[i] ? Color.LimeGreen : Color.Red, 2f, 1f);
+        }
+
+        public void FinishPlay(Game game, GraphicsDevice graphicsDevice)
+        {
+            PlayerState.UpdateMedal();
+            GameManager.ActivePlayer.AddRecord(GameManager.LoadedMD5, PlayerState.RecordData);
+            Console.WriteLine($"Notes processed: {PlayerState.TotalObjectsHit}");
+            
+            // TEMPORARY: Send player back to song select
+            // TODO: Result screen.
+            Game1.ScreenManager.ReplaceScreen(new SongSelectScreen(game),
+                new FadeTransition(graphicsDevice, Color.Black, 2f));
         }
         
         

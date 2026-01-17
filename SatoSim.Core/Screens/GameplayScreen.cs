@@ -179,11 +179,18 @@ namespace SatoSim.Core.Screens
                 _stateManager.IsPlaying = !_stateManager.IsPlaying;
                 _songChannel.Paused = !_stateManager.IsPlaying || _stateManager.Position < _songOffset;
             }
-            // if(MouseExtended.GetState().DeltaScrollWheelValue < 0)
-            //     _stateManager.Position -= gameTime.GetElapsedSeconds() * 10f;
-            // if(MouseExtended.GetState().DeltaScrollWheelValue > 0)
-            //     _stateManager.Position += gameTime.GetElapsedSeconds() * 10f;
 
+            // TEMPORARY: Finish playing
+            // TODO: Implement finish animations
+            if (_stateManager.IsPlaying &&
+                (_stateManager.Progress >= 1f ||
+                 GamePad.GetState(0).IsButtonDown(Buttons.Back) ||
+                 KeyboardExtended.GetState().WasKeyPressed(Keys.Escape)))
+            {
+                _stateManager.IsPlaying = false;
+                _stateManager.FinishPlay(Game, GraphicsDevice);
+            }
+            
             // Note speed lock behavior
             {
                 bool heldDown = false;

@@ -22,7 +22,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Managers\PlayStateManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\SettingsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Managers\SongSelectManager.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screens\AndroidDirectorySelectionScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Screens\PlayResultScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\SongSelectScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\PlayfieldUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\AsyncTexture2D.cs" />
