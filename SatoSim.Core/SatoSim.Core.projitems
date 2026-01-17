@@ -23,6 +23,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Managers\SettingsManager.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Screens\GameplayScreen.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\PlayfieldUtils.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Utils\AsyncTexture2D.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\TimingUtils.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\TouchEventExArgs.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Utils\TouchListenerFix.cs" />
