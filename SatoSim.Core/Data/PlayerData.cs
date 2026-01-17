@@ -13,5 +13,19 @@ namespace SatoSim.Core.Data
             { "SOUND_SongOffset", 0.25f },
             { "VISUAL_ExtraEffects", true },
         };
-}
+
+        public Dictionary<string, PlayRecord> Records = new Dictionary<string, PlayRecord>();
+
+        public void AddRecord(string md5, PlayRecord record)
+        {
+            if (Records.TryGetValue(md5, out PlayRecord old))
+            {
+                Records[md5] = PlayRecord.MergeRecords(old, record);
+            }
+            else
+            {
+                Records.Add(md5, record);
+            }
+        }
+    }
 }

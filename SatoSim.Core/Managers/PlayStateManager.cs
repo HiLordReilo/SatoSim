@@ -204,27 +204,36 @@ namespace SatoSim.Core.Managers
                     // Stream is too far ahead - break out
                     if(stream.StartTime - Position > JUDGE_FANTASTIC) break;
                     
+                    // Stream is already processed - skip
                     if(stream.IsFinished) continue;
                     
+                    // We process all of unprocessed points
                     for (int i = stream.PointsProcessed; i < stream.Points.Length - 1; i++)
                     {
+                        // No unprocessed points left - break out
                         if(i + 1 > stream.PointsPassed) break;
                         
                         PlayerState.ProcessStreamPoint(stream.PointScoreWeight);
                         stream.PointsProcessed++; 
                         stream.IsFinished = stream.PointsProcessed >= stream.Points.Length - 1;
                     }
-                    
-                    if(stream.IsFinished) continue;
+
+                    // Stream is now finished - increment completed stream count and skip to the next one
+                    if (stream.IsFinished)
+                    {
+                        PlayerState.AddCompletedStream();
+                        continue;
+                    }
                     
                     // Stream have ended (either timed out or reached its end)
-                    if (stream.EndTime - Position <= -JUDGE_FINE || stream.PointsPassed >= stream.Points.Length - 1)
+                    if (stream.EndTime - Position <= -JUDGE_FINE)
                     {
                         PlayerState.AddMissedStream();
                         stream.IsFinished = true;
                         continue;
                     }
                     
+                    // TODO: Implement proper inertia calculation
                     stream.PointsPassed += stream.Inertia * gameTime.GetElapsedSeconds();
                     stream.Inertia /= 1.005f;
                     
@@ -380,6 +389,7 @@ namespace SatoSim.Core.Managers
                         }
                         else // Otherwise, we immediately process it
                         {
+                            PlayerState.AddTimingDeviation(NoteBatches[NoteBatchesPassed + b].Time - Position);
                             PlayerState.ProcessJudgment(judge);
                             _scene.TriggerHitEffect(recDist.Item1, judge,
                                 NoteBatches[NoteBatchesPassed + b].Notes[n].ObjectType, 0f);
@@ -502,6 +512,7 @@ namespace SatoSim.Core.Managers
         
         private void ReleaseSuspendedNote(int lane, float hitEffectRotation = 0f)
         {
+            PlayerState.AddTimingDeviation(SuspendedNotes[lane].Time - Position);
             _scene.TriggerHitEffect(lane, SuspendedJudgments[lane], SuspendedNotes[lane].Notes[0].ObjectType, hitEffectRotation);
             PlayerState.ProcessJudgment(SuspendedJudgments[lane]);
             SuspendedJudgments[lane] = -1;
@@ -520,6 +531,7 @@ namespace SatoSim.Core.Managers
         {
             Console.WriteLine("Slash tapped");
             
+            PlayerState.AddTimingDeviation(SuspendedNotes[lane].Time - Position);
             _scene.TriggerHitEffect(lane, JUDGE_ID_E_FINE, SuspendedNotes[lane].Notes[0].ObjectType, 0f);
             PlayerState.AddTappedSlash();
             SuspendedJudgments[lane] = -1;
