@@ -24,7 +24,7 @@ namespace SatoSim.Core
 {
     public class Game1 : Game
     {
-        public static Random RandomGenerator;
+        public static readonly Random RandomGenerator = new Random((int)DateTime.Now.Ticks);
         public static GraphicsDeviceManager Graphics;
         
         public static readonly ScreenManager ScreenManager = new ScreenManager();
@@ -56,8 +56,6 @@ namespace SatoSim.Core
             Window.AllowUserResizing = true;
 
             Window.Title = "SatoSim";
-            
-            RandomGenerator = new Random((int)DateTime.Now.Ticks);
 
             CultureInfo.CurrentCulture =
                 new CultureInfo(CultureInfo.InvariantCulture.LCID)
@@ -201,14 +199,15 @@ namespace SatoSim.Core
             GraphicsDevice.SetRenderTarget(_gameCanvas);
             ScreenManager.Draw(gameTime);
             GraphicsDevice.SetRenderTarget(null);
-			
+            
             CanvasScale = (float)GraphicsDevice.Viewport.Height / _gameCanvas.Height;
             if (_gameCanvas.Width * CanvasScale > GraphicsDevice.Viewport.Width)
                 CanvasScale *= GraphicsDevice.Viewport.Width / (_gameCanvas.Width * CanvasScale);
-			
+            
             _spriteBatch.Begin();
             {
-                _spriteBatch.Draw(_gameCanvas, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), null, Color.White, 0, _gameCanvas.Bounds.Center.ToVector2(), CanvasScale, SpriteEffects.None, 1f);
+                _spriteBatch.Draw(_gameCanvas, GraphicsDevice.Viewport.Bounds.Center.ToVector2(), null, Color.White, 0,
+                    _gameCanvas.Bounds.Center.ToVector2(), CanvasScale, SpriteEffects.None, 1f);
                 
                 if (ScreenManager.ActiveScreen == null)
                     _spriteBatch.DrawString(GlobalAssetManager.GeneralFont, "No active screen.", Vector2.One * 32f,
@@ -278,18 +277,29 @@ namespace SatoSim.Core
         
         public static Point ScreenToCanvasSpace(Point inputLocation)
         {
-            float canvasScale = (float) Graphics.GraphicsDevice.Viewport.Height / ResolutionY;
-            if (ResolutionX * canvasScale > Graphics.GraphicsDevice.Viewport.Width)
-                canvasScale *= Graphics.GraphicsDevice.Viewport.Width / (ResolutionX * canvasScale);
-
-            Point canvasOffset =
-                new Point((Graphics.GraphicsDevice.Viewport.Width - (int)(ResolutionX * canvasScale)) / 2,
-                    (Graphics.GraphicsDevice.Viewport.Height - (int)(ResolutionY * canvasScale)) / 2);
+            Point canvasOffset = GetPointCanvasOffset();
             
-            Point newLoc = new Point((int)((inputLocation.X - canvasOffset.X) / canvasScale), (int)((inputLocation.Y - canvasOffset.Y) / canvasScale));
+            Point newLoc = new Point((int)((inputLocation.X - canvasOffset.X) / CanvasScale), (int)((inputLocation.Y - canvasOffset.Y) / CanvasScale));
             
             return newLoc;
         }
+        
+        public static Vector2 ScreenToCanvasSpace(Vector2 inputLocation)
+        {
+            Vector2 canvasOffset = GetVectorCanvasOffset();
+            
+            Vector2 newLoc = new Vector2((inputLocation.X - canvasOffset.X) / CanvasScale, (inputLocation.Y - canvasOffset.Y) / CanvasScale);
+            
+            return newLoc;
+        }
+
+        public static Point GetPointCanvasOffset() =>
+            new((Graphics.GraphicsDevice.Viewport.Width - (int)(ResolutionX * CanvasScale)) / 2,
+                (Graphics.GraphicsDevice.Viewport.Height - (int)(ResolutionY * CanvasScale)) / 2);
+
+        public static Vector2 GetVectorCanvasOffset() =>
+            new((Graphics.GraphicsDevice.Viewport.Width - ResolutionX * CanvasScale) / 2f,
+                (Graphics.GraphicsDevice.Viewport.Height - ResolutionY * CanvasScale) / 2f);
 
         public static void ResetRenderTarget()
         {
