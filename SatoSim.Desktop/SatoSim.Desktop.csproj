@@ -7,7 +7,7 @@
         <TieredCompilation>false</TieredCompilation>
         <UseWindowsForms>true</UseWindowsForms>
         <RootNamespace>SatoSim.DesktopDX</RootNamespace>
-        <Configurations>Debug;Release;Android;Desktop</Configurations>
+        <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
         <AssemblyName>SatoSim</AssemblyName>
         <Company />
@@ -16,6 +16,12 @@
     <PropertyGroup>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <ApplicationIcon>Icon.ico</ApplicationIcon>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <OutputPath>..\build\Debug\</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <OutputPath>..\build\Release\</OutputPath>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="FmodForFoxes" Version="3.2.0" />
@@ -31,11 +37,6 @@
       <Content Include="fmod.dll">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
-    </ItemGroup>
-    <ItemGroup>
-      <AndroidResource Include="Icon.png">
-        <SubType>Designer</SubType>
-      </AndroidResource>
     </ItemGroup>
     <Target Name="RestoreDotnetTools" BeforeTargets="CollectPackageReferences">
         <Message Text="Restoring dotnet tools (this might take a while depending on your internet speed and should only happen upon building your project for the first time, or after upgrading MonoGame, or clearing your nuget cache)" Importance="High"/>

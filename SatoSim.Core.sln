@@ -10,23 +10,38 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FmodForFoxes.Samples.Androi
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Android|Any CPU = Android|Any CPU
-		Desktop|Any CPU = Desktop|Any CPU
+		Android_Release|Any CPU = Android_Release|Any CPU
+		Desktop_Release|Any CPU = Desktop_Release|Any CPU
+		Android_Debug|Any CPU = Android_Debug|Any CPU
+		Desktop_Debug|Any CPU = Desktop_Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android|Any CPU.ActiveCfg = Android|Any CPU
-		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android|Any CPU.Build.0 = Android|Any CPU
-		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Desktop|Any CPU.ActiveCfg = Desktop|Any CPU
-		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android|Any CPU.ActiveCfg = Android|Any CPU
-		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android|Any CPU.Build.0 = Android|Any CPU
-		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop|Any CPU.ActiveCfg = Desktop|Any CPU
-		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop|Any CPU.Build.0 = Desktop|Any CPU
-		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Android|Any CPU.ActiveCfg = Android|Any CPU
-		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop|Any CPU.ActiveCfg = Desktop|Any CPU
-		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop|Any CPU.Build.0 = Desktop|Any CPU
-		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android|Any CPU.ActiveCfg = Debug|Any CPU
-		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android|Any CPU.Build.0 = Debug|Any CPU
-		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Desktop|Any CPU.ActiveCfg = Debug|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android_Release|Any CPU.Build.0 = Release|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Desktop_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Android_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1672A386-60B9-4CCE-8963-AEDE511AC799}.Desktop_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android_Release|Any CPU.Build.0 = Release|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Desktop_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Android_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB00412E-A2EB-4309-B233-CFCA97999A11}.Desktop_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Android_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop_Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop_Release|Any CPU.Build.0 = Release|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Android_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop_Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4B054660-4551-4C2E-B96E-D83108E1F17A}.Desktop_Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android_Debug|Any CPU.ActiveCfg = AndroidDebug|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android_Debug|Any CPU.Build.0 = AndroidDebug|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android_Release|Any CPU.ActiveCfg = AndroidRelease|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop_Debug|Any CPU.ActiveCfg = DesktopDebug|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop_Debug|Any CPU.Build.0 = DesktopDebug|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop_Release|Any CPU.ActiveCfg = DesktopRelease|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Desktop_Release|Any CPU.Build.0 = DesktopRelease|Any CPU
+		{A0CDBD0E-3A41-42B7-9425-A838BC2C7383}.Android_Release|Any CPU.Build.0 = AndroidRelease|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection

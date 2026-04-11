@@ -6,9 +6,17 @@
         <ApplicationId>rip.HiLord.SatoSim</ApplicationId>
         <ApplicationVersion>1</ApplicationVersion>
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
-        <Configurations>Debug;Release;Android;Desktop</Configurations>
+        <Configurations>Debug;Release</Configurations>
         <Platforms>AnyCPU</Platforms>
         <AssemblyName>SatoSim</AssemblyName>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+      <OutputPath>..\build\Debug\</OutputPath>
+    </PropertyGroup>
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a;x86_64</AndroidSupportedAbis>
+      <OutputPath>..\build\Release\</OutputPath>
     </PropertyGroup>
     <ItemGroup>
         <PackageReference Include="FmodForFoxes" Version="3.2.0" />
