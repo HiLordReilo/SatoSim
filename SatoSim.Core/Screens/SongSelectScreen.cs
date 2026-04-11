@@ -45,10 +45,14 @@ namespace SatoSim.Core.Screens
         
         private Texture2D _tex_StartButton;
         private Texture2D _tex_ListEntry;
+        private Texture2D _tex_ListSeparator;
+        private Texture2D _tex_ListScrollbar;
+        private Texture2D _tex_ListScrollbarHandle;
         private Texture2D _tex_FolderEntry;
         private Texture2D _tex_FolderIcon;
         private Dictionary<ChartMetadata.DifficultyTier, Texture2D> _tex_SongEntryTiers;
         private Texture2D _tex_ListEntrySelection;
+        private Texture2D _tex_SongEntryNoScore;
 
         private Vector2 _pos_entrySelectionText = new Vector2(585f, 18f);
         private Vector2 _pos_entryDirName = new Vector2(100f, 26f);
@@ -57,17 +61,20 @@ namespace SatoSim.Core.Screens
         private Vector2 _pos_entrySongRating = new Vector2(6f, 6f);
         private Vector2 _pos_entrySongTitle = new Vector2(182f, 18f);
         private Vector2 _pos_entrySongArtist = new Vector2(182f, 58f);
-        private Vector2 _pos_entrySongScore = new Vector2(423f, 10f);
+        private Vector2 _pos_entrySongScore = new Vector2(423f, 6f);
         private Vector2 _pos_entrySongGrade = new Vector2(421f, 45f);
         private Vector2 _pos_entrySongMedal = new Vector2(496f, 45f);
         private Vector2 _pos_listEntryDistance = new Vector2(32f, 86f);
+        private float _pos_listEntrySeparationMultiplier = 0.11f;
         private Vector2 _pos_listAnchor = new Vector2(200f, 8f);
+        private Vector2 _pos_listScrollbar = new Vector2(160f, 128f);
         private Rectangle _pos_startButton;
         private Rectangle _pos_listParenDirButton;
 
         private DynamicSpriteFont _entrySelectionFont;
         private DynamicSpriteFont _dirEntryFont;
         private DynamicSpriteFont _songEntryInfoFont;
+        private DynamicSpriteFont _messageFont;
         private Utility.MonospaceFont _songEntryScoreFont;
         private Texture2DAtlas _songEntryGrades;
         private Texture2DAtlas _songEntryMedals;
@@ -89,6 +96,9 @@ namespace SatoSim.Core.Screens
         {
             _tex_StartButton = Content.Load<Texture2D>("Graphics/SongSelect/startButton");
             _tex_ListEntry = Content.Load<Texture2D>("Graphics/SongSelect/listEntry");
+            _tex_ListSeparator = Content.Load<Texture2D>("Graphics/SongSelect/listSeparator");
+            _tex_ListScrollbar = Content.Load<Texture2D>("Graphics/SongSelect/listScrollBar");
+            _tex_ListScrollbarHandle = Content.Load<Texture2D>("Graphics/SongSelect/listScrollHead");
             _tex_FolderEntry = Content.Load<Texture2D>("Graphics/SongSelect/folderEntry");
             _tex_FolderIcon = Content.Load<Texture2D>("Graphics/Icons/ico_folderDefault");
             _tex_SongEntryTiers = new ()
@@ -102,6 +112,7 @@ namespace SatoSim.Core.Screens
                 { ChartMetadata.DifficultyTier.Other, Content.Load<Texture2D>("Graphics/SongSelect/songEntry_other") },
             };
             _tex_ListEntrySelection = Content.Load<Texture2D>("Graphics/SongSelect/selectedListEntry");
+            _tex_SongEntryNoScore = Content.Load<Texture2D>("Graphics/SongSelect/songEntry_noScore");
             
             for (int i = 0; i < _renderedListEntries.Length; i++)
             {
@@ -113,6 +124,7 @@ namespace SatoSim.Core.Screens
             UpdateEntryIdOffsets(_visibleDbEntryBaseOffset);
             Anim_OnDirectoryChange();
 
+            _messageFont = GlobalAssetManager.MainFontSystem.GetFont(36f);
             _entrySelectionFont = GlobalAssetManager.VersatileFontSystem.GetFont(20f);
             _dirEntryFont = GlobalAssetManager.VersatileFontSystem.GetFont(26f);
             _songEntryInfoFont = GlobalAssetManager.VersatileFontSystem.GetFont(16f);
@@ -264,18 +276,34 @@ namespace SatoSim.Core.Screens
                     _visibleDbEntryBaseOffset = _manager.ActiveDirectory.SubEntries.Length - 1;
                 UpdateEntryIdOffsets(_visibleDbEntryBaseOffset);
             }
+
             if (_listScroll < -1f)
             {
                 _listScroll += 1f;
                 _visibleDbEntryBaseOffset++;
                 UpdateEntryIdOffsets(_visibleDbEntryBaseOffset);
             }
-            
+
             // Update entry bounding rectangles
-            for (int i = 0; i < _renderedListEntries.Length; i++)
             {
-                _listEntryRects[i] = new Rectangle((_pos_listAnchor + _pos_listEntryDistance * (i - 1f + _listScroll)).ToPoint(),
-                    (_tex_ListEntry.Bounds.Size.ToVector2() * _listEntryScale).ToPoint());
+                Vector2 pos = _pos_listAnchor - _pos_listEntryDistance * 2f +
+                              _pos_listEntryDistance * (1f + _listScroll) + Vector2.One * 2f;
+                int totalEntryCount = _manager.ActiveDirectory.SubEntries.Length;
+
+                if(totalEntryCount > 0)
+                    for (int i = 0; i < _renderedListEntries.Length; i++)
+                    {
+                        int entryId = _visibleDbEntryIdOffsets[i] % totalEntryCount;
+
+                        _listEntryRects[i] = new Rectangle(pos.ToPoint(),
+                            (_tex_ListEntry.Bounds.Size.ToVector2() * _listEntryScale).ToPoint());
+
+                        pos += _pos_listEntryDistance;
+
+                        if (entryId < totalEntryCount - 1) continue;
+
+                        pos += _pos_listEntryDistance * _pos_listEntrySeparationMultiplier;
+                    }
             }
             
             // Check touch gestures
@@ -296,13 +324,25 @@ namespace SatoSim.Core.Screens
             GraphicsDevice.Clear(Color.WhiteSmoke);
             
             _spriteBatch.Begin(SpriteSortMode.FrontToBack);
+
+            // List background
+            float listDir = float.Atan2(_pos_listEntryDistance.Y, _pos_listEntryDistance.X);
+            _spriteBatch.DrawLine(new Vector2(350f, -100f), 1000f, listDir, Color.Black * 0.5f, 550f, 0.4f);
             
-            for (int i = 0; i < _renderedListEntries.Length; i++)
+            // List entries
+            Vector2 pos = _pos_listAnchor - _pos_listEntryDistance * 2f + _pos_listEntryDistance * (1f + _listScroll);
+            int totalEntryCount = _manager.ActiveDirectory.SubEntries.Length;
+            
+            // Check if current directory has any entries
+            if (totalEntryCount == 0) // If there are none - display an empty directory message
+                _spriteBatch.DrawString(_messageFont, "This directory is empty >.<", _pos_listAnchor + _pos_listEntryDistance * 3.75f, new Color(0xFF1B1B1B), 0f,
+                    Vector2.Zero, Vector2.One, 1f);
+            else // If there are any - display them
+                for (int i = 0; i < _renderedListEntries.Length; i++)
             {
-                Vector2 pos = _pos_listAnchor + _pos_listEntryDistance * (i - 1f + _listScroll);
-                SongDatabase.DbEntry entry =
-                    _manager.ActiveDirectory.SubEntries[
-                        _visibleDbEntryIdOffsets[i] % _manager.ActiveDirectory.SubEntries.Length];
+                
+                int entryId = _visibleDbEntryIdOffsets[i] % totalEntryCount;
+                SongDatabase.DbEntry entry = _manager.ActiveDirectory.SubEntries[entryId];
                 bool isSong = entry.GetType() == typeof(SongSelectManager.SongEntry);
                 
                 
@@ -315,7 +355,7 @@ namespace SatoSim.Core.Screens
                     0.5f);
                 
                 // Selection border
-                if (_manager.SelectedEntry == _visibleDbEntryIdOffsets[i] % _manager.ActiveDirectory.SubEntries.Length)
+                if (_manager.SelectedEntry == entryId)
                 {
                     // Selection border
                     _spriteBatch.Draw(_tex_ListEntrySelection, pos, null,
@@ -341,8 +381,34 @@ namespace SatoSim.Core.Screens
                     null, Color.White, 0, contentOrigin,
                     Vector2.One * _listEntryScale * new Vector2(1f, isSong ? _interpolables.ListEntryContentHeight : _interpolables.ListEntryHeight ),
                     SpriteEffects.None, 0.51f);
+                
+                pos += _pos_listEntryDistance;
+
+                if (entryId < totalEntryCount - 1) continue;
+                
+                _spriteBatch.Draw(_tex_ListSeparator, pos, null,
+                    Color.White, 0, Vector2.Zero,
+                    Vector2.One * _listEntryScale, SpriteEffects.None,
+                    0.5f);
+
+                pos += _pos_listEntryDistance * _pos_listEntrySeparationMultiplier;
             }
             
+            // List Scrollbar
+            {
+                Vector2 scrollEndPos = _pos_listScrollbar + Vector2.Rotate(Vector2.UnitX * (_tex_ListScrollbar.Width - 16f), listDir);
+                Vector2 scrollHandlePos = Vector2.Lerp(_pos_listScrollbar, scrollEndPos, (float)((_visibleDbEntryBaseOffset + 2 - _listScroll) % totalEntryCount) / totalEntryCount / 2f);
+                
+                _spriteBatch.Draw(_tex_ListScrollbar, _pos_listScrollbar, null,
+                    Color.White, listDir, Vector2.Zero,
+                    Vector2.One * 0.5f, SpriteEffects.None,
+                    0.5f);
+                _spriteBatch.Draw(_tex_ListScrollbarHandle, scrollHandlePos, null,
+                    Color.White, listDir, Vector2.Zero, 
+                    Vector2.One * 0.65f, SpriteEffects.None,
+                    0.51f);
+            }
+
             // Start button
             _spriteBatch.Draw(_tex_StartButton, _pos_startButton, null, Color.White * (_canStart ? 1f : 0.5f), 0f,
                 Vector2.Zero, SpriteEffects.None, 0.5f);
@@ -375,6 +441,9 @@ namespace SatoSim.Core.Screens
         
         private void PrepareSonglistEntries()
         {
+            // If current directory is empty - do nothing 
+            if (_manager.ActiveDirectory.SubEntries.Length == 0) return;
+            
             for (int i = 0; i < _renderedListEntries.Length; i++)
             {
                 RenderEntry(ref _renderedListEntries[i],
@@ -430,9 +499,14 @@ namespace SatoSim.Core.Screens
                         layerDepth: 1f); // Artist
                     
                     // Score data
-                    _spriteBatch.DrawString(_songEntryScoreFont, chart.BestScore.Score.ToString("0000000"),
-                        _pos_entrySongScore, Color.White, Vector2.One * 0.35f, Vector2.One, Vector2.One, -40f, 0.5f,
-                        null, Utility.TextAlignment.Left); // Score
+                    if (chart.BestScore.Score > 0f)
+                        _spriteBatch.DrawString(_songEntryScoreFont, chart.BestScore.Score.ToString("0000000"),
+                            _pos_entrySongScore, Color.White, Vector2.One * 0.35f, Vector2.One, Vector2.UnitY * -8f, -40f, 0.5f,
+                            null, Utility.TextAlignment.Left); // Score
+                    else
+                        _spriteBatch.Draw(_tex_SongEntryNoScore, _pos_entrySongScore, null, Color.White); // No score
+                    
+                    
                     _spriteBatch.Draw(_songEntryGrades[chart.BestScore.GetGradeId()], _pos_entrySongGrade,
                         Color.White, 0f, Vector2.Zero, Vector2.One, SpriteEffects.None, 0.5f); // Grade
                     _spriteBatch.Draw(_songEntryMedals[_songEntryMedals.RegionCount - 1 - (int)chart.BestScore.Medal],
@@ -455,6 +529,9 @@ namespace SatoSim.Core.Screens
 
         private void UpdateEntryIdOffsets(int baseOffset = 0)
         {
+            // If current directory is empty - do nothing 
+            if (_manager.ActiveDirectory.SubEntries.Length == 0) return;
+            
             for (int i = 0; i < _renderedListEntries.Length; i++)
             {
                 _visibleDbEntryIdOffsets[i] = (i + baseOffset) % _manager.ActiveDirectory.SubEntries.Length;

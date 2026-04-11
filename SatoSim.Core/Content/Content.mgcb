@@ -567,7 +567,7 @@
 /processorParam:ResizeToPowerOfTwo=False
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
-/build:Graphics/General/gradient.png
+/build:Graphics/General/gradient.png;Graphics/General/gradient
 
 #begin Graphics/General/ScoreFont.png
 /importer:TextureImporter
@@ -640,6 +640,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/SongSelect/listScrollHead.png
+
+#begin Graphics/SongSelect/listSeparator.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/SongSelect/listSeparator.png;Graphics/SongSelect/listSeparator
 
 #begin Graphics/SongSelect/optsButton_back.png
 /importer:TextureImporter
@@ -832,6 +844,18 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/SongSelect/songEntry_night.png
+
+#begin Graphics/SongSelect/songEntry_noScore.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/SongSelect/songEntry_noScore.png;Graphics/SongSelect/songEntry_noScore
 
 #begin Graphics/SongSelect/songEntry_other.png
 /importer:TextureImporter
