@@ -340,6 +340,7 @@ namespace SatoSim.Core.Screens
             else // If there are any - display them
                 for (int i = 0; i < _renderedListEntries.Length; i++)
             {
+                //_spriteBatch.DrawRectangle(_listEntryRects[i], Color.Red, 2f, 1f);
                 
                 int entryId = _visibleDbEntryIdOffsets[i] % totalEntryCount;
                 SongDatabase.DbEntry entry = _manager.ActiveDirectory.SubEntries[entryId];

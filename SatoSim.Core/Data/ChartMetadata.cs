@@ -34,6 +34,11 @@ namespace SatoSim.Core.Data
         public string ChartFilename = Empty;
         public string ChartCredit = "-";
         public string SongFilename = Empty;
+        public string PreviewFilename = Empty;
+        public string BackgroundFilename = Empty;
+        public string BackgroundCredit = "-";
+        public string ResultsBackgroundFilename = Empty;
+        public string ResultsBackgroundCredit = "-";
         
         public string RatingString =>
             Difficulty is DifficultyTier.Other or DifficultyTier.Invalid ? DifficultyRating.ToString()
@@ -62,6 +67,9 @@ namespace SatoSim.Core.Data
         public bool MovieSpecified => !IsNullOrEmpty(MovieFilename);
         public bool ChartSpecified => !IsNullOrEmpty(ChartFilename);
         public bool SongSpecified => !IsNullOrEmpty(SongFilename);
+        public bool SongPreviewSpecified => !IsNullOrEmpty(PreviewFilename);
+        public bool BackgroundSpecified => !IsNullOrEmpty(BackgroundFilename);
+        public bool ResultsBackgroundSpecified => !IsNullOrEmpty(ResultsBackgroundFilename);
         
 
         private enum ParserTokens
@@ -84,27 +92,39 @@ namespace SatoSim.Core.Data
             ChartFilename,
             ChartCredit,
             SongFilename,
+            SongPreviewFilename,
+            BackgroundFilename,
+            BackgroundCredit,
+            ResultsBackgroundFilename,
+            ResultsBackgroundCredit,
+            VisualsCredit,
         }
         
         private static readonly Dictionary<ParserTokens, string[]> MetaTokens = new()
         {
-            { ParserTokens.Title, ["TITLE"] },
-            { ParserTokens.SubTitle, ["SUBTITLE", "SUB_TITLE", "TITLESUB", "TITLE_SUB"] },
-            { ParserTokens.Artist, ["ARTIST"] },
-            { ParserTokens.SubArtist, ["SUBARTIST", "SUB_ARTIST", "ARTISTSUB", "ARTIST_SUB"] },
-            { ParserTokens.Genre, ["GENRE"] },
-            { ParserTokens.DifficultyTier, ["TIER", "DIFFICULTYTIER", "DIFFICULTY_TIER", "DIFFTIER", "DIFF_TIER"] },
-            { ParserTokens.DifficultyRating, ["RATE", "DIFFICULTYRATE", "DIFFICULTY_RATE", "DIFFRATE", "DIFF_RATE", "RATING", "DIFFICULTYRATING", "DIFFICULTY_RATING", "DIFFRATING", "DIFF_RATING"] },
-            { ParserTokens.Bpm, ["BPM"] },
-            { ParserTokens.LowestBpm, ["LOWBPM", "LOW_BPM", "BPMLOW", "BPM_LOW", "LOWESTBPM", "LOWEST_BPM", "BPMLOWEST", "BPM_LOWEST", "LOBPM", "LO_BPM", "BPMLO", "BPM_LO"] },
-            { ParserTokens.HighestBpm, ["HIGHBPM", "HIGH_BPM", "BPMHIGH", "BPM_HIGH", "HIGHESTBPM", "HIGHEST_BPM", "BPMHIGHEST", "BPM_HIGHEST", "HIBPM", "HI_BPM", "BPMHI", "BPM_HI"] },
-            { ParserTokens.JacketFilename, ["JACKET", "JK", "JACKETFILE", "JACKET_FILE", "JKFILE", "JK_FILE", "JACKETFILENAME", "JACKET_FILENAME", "JKFILENAME", "JK_FILENAME"] },
-            { ParserTokens.JacketCredit, ["ILLUSTRATOR", "JACKETCR", "JACKET_CR", "JACKETCREDIT", "JACKET_CREDIT", "JACKETARTIST", "JACKET_ARTIST", "JKCR", "JK_CR", "JKCREDIT", "JK_CREDIT", "JKARTIST", "JK_ARTIST"] },
-            { ParserTokens.MovieFilename, ["MOVIE", "MV", "MOVIEFILE", "MOVIE_FILE", "MVFILE", "MV_FILE", "MOVIEFILENAME", "MOVIE_FILENAME", "MVFILENAME", "MV_FILENAME"] },
-            { ParserTokens.MovieCredit, ["MOVIECR", "MOVIE_CR", "MOVIECREDIT", "MOVIE_CREDIT", "MOVIEARTIST", "MOVIE_ARTIST", "MVCR", "MV_CR", "MVCREDIT", "MV_CREDIT", "MVARTIST", "MV_ARTIST"] },
-            { ParserTokens.ChartFilename, ["CHART", "CHARTFILE", "CHART_FILE", "CHARTFILENAME", "CHART_FILENAME"] },
-            { ParserTokens.ChartCredit, ["CHARTER", "CHARTER", "CHART_CR", "CHARTCREDIT", "CHART_CREDIT", "CHARTAUTHOR", "CHART_AUTHOR", "CHARTCREATOR", "CHART_CREATOR", "CHARTMAKER", "CHART_MAKER",] },
-            { ParserTokens.SongFilename, ["AUDIO", "AUDIOFILE", "AUDIO_FILE", "AUDIOFILENAME", "AUDIO_FILENAME", "SONG", "SONGFILE", "SONG_FILE", "SONGFILENAME", "SONG_FILENAME"] },
+            { ParserTokens.Title, ["Title"] },
+            { ParserTokens.SubTitle, ["SubTitle", "TitleSub"] },
+            { ParserTokens.Artist, ["Artist"] },
+            { ParserTokens.SubArtist, ["SubArtist", "ArtistSub"] },
+            { ParserTokens.Genre, ["Genre"] },
+            { ParserTokens.DifficultyTier, ["Tier", "DifficultyTier", "DiffTier"] },
+            { ParserTokens.DifficultyRating, ["Rate", "DifficultyRate", "DiffRate", "Rating", "DifficultyRating", "DiffRating"] },
+            { ParserTokens.Bpm, ["BPM", "Tempo"] },
+            { ParserTokens.LowestBpm, ["LowBPM", "BPMLow", "LowestBPM", "BPMLowest", "LoBPM", "BPMLo", "MinBPM", "BPMMin"] },
+            { ParserTokens.HighestBpm, ["HighBPM", "BPMHigh", "HighestBPM", "BPMHighest", "HiBPM", "BPMHi", "MaxBPM", "BPMMax"] },
+            { ParserTokens.JacketFilename, ["Jacket", "JK", "JacketFile", "JKFile", "JacketFilename", "JKFilename"] },
+            { ParserTokens.JacketCredit, ["Illustrator", "JacketCR", "JacketCredit", "JacketArtist", "JKCR", "JKCredit", "JKArtist"] },
+            { ParserTokens.MovieFilename, ["Movie", "MV", "BGA", "MovieFile", "MVFile", "BGAFile", "MovieFilename", "MVFilename", "BGAFilename"] },
+            { ParserTokens.MovieCredit, ["MovieCR", "MovieCredit", "MovieArtist", "MVCR", "MVCredit", "BGAArtist", "BGACR", "BGACredit", "BGAArtist"] },
+            { ParserTokens.ChartFilename, ["Chart", "ChartFile", "ChartFilename"] },
+            { ParserTokens.ChartCredit, ["Charter", "ChartCR", "ChartCredit", "ChartAuthor", "ChartCreator", "ChartMaker"] },
+            { ParserTokens.SongFilename, ["Audio", "AudioFile", "AudioFilename", "Song", "SongFile", "SongFilename"] },
+            { ParserTokens.SongPreviewFilename, ["Preview", "PreviewFile", "PreviewFilename"] },
+            { ParserTokens.BackgroundFilename, ["Background", "BG", "BackgroundFile", "BGFile", "BackgroundFilename", "BGFilename"] },
+            { ParserTokens.BackgroundCredit, ["BackgroundIllustrator", "BGIllustrator", "BackgroundCR", "BackgroundCredit", "BackgroundArtist", "BGCR", "BGCredit", "BGArtist"] },
+            { ParserTokens.ResultsBackgroundFilename, ["ResultsBackground", "ResultsBG", "ResultsBackgroundFile", "ResultsBGFile", "ResultsBackgroundFilename", "ResultsBGFilename"] },
+            { ParserTokens.ResultsBackgroundCredit, ["ResultsBackgroundIllustrator", "ResultsBGIllustrator", "ResultsBackgroundCR", "ResultsBackgroundCredit", "ResultsBackgroundArtist", "ResultsBGCR", "ResultsBGCredit", "ResultsBGArtist"] },
+            { ParserTokens.VisualsCredit, ["Visual", "Visuals", "VisualCR", "VisualsCR", "VisualArtist", "VisualsArtist", "VisualCredit", "VisualsCredit"] },
         };
         
         private static readonly Dictionary<DifficultyTier, string[]> MetaTierTokens = new()
@@ -113,7 +133,7 @@ namespace SatoSim.Core.Data
             { DifficultyTier.Medium, ["MEDIUM", "M", "MD", "MED", "NORMAL", "N", "NM", "2"] },
             { DifficultyTier.Beast, ["BEAST", "B", "BS", "BT", "BST", "HARD", "H", "HD", "3"] },
             { DifficultyTier.Nightmare, ["NIGHTMARE", "N", "NM", "NT", "NIGHT", "SPECIAL", "S", "SP", "4"] },
-            { DifficultyTier.SilentNight, ["SILENTNIGHT", "SILENT_NIGHT", "SN", "SNIGHT", "S_NIGHT", "SILNIGHT", "SIL_NIGHT", "INSANE", "I", "IN"] },
+            { DifficultyTier.SilentNight, ["SILENTNIGHT", "SN", "SNIGHT", "SILNIGHT", "INSANE", "I", "IN"] },
             { DifficultyTier.Other, ["OTHER", "O", "OT", "EXTRA", "EX", "APPEND", "APP", "0", "-1"] },
         };
         
@@ -214,6 +234,27 @@ namespace SatoSim.Core.Data
                     case ParserTokens.SongFilename:
                         result.SongFilename = value;
                         break;
+                    case ParserTokens.SongPreviewFilename:
+                        result.PreviewFilename = value;
+                        break;
+                    case ParserTokens.BackgroundFilename:
+                        result.BackgroundFilename = value;
+                        break;
+                    case ParserTokens.BackgroundCredit:
+                        result.BackgroundCredit = IsNullOrEmpty(value) ? "-" : value;;
+                        break;
+                    case ParserTokens.ResultsBackgroundFilename:
+                        result.ResultsBackgroundFilename = value;
+                        break;
+                    case ParserTokens.ResultsBackgroundCredit:
+                        result.ResultsBackgroundCredit = IsNullOrEmpty(value) ? "-" : value;;
+                        break;
+                    case ParserTokens.VisualsCredit:
+                        if(result.JacketCredit == "-") result.JacketCredit = IsNullOrEmpty(value) ? "-" : value;
+                        if(result.MovieCredit == "-") result.MovieCredit = IsNullOrEmpty(value) ? "-" : value;
+                        if(result.BackgroundCredit == "-") result.BackgroundCredit = IsNullOrEmpty(value) ? "-" : value;;
+                        if(result.ResultsBackgroundCredit == "-") result.ResultsBackgroundCredit = IsNullOrEmpty(value) ? "-" : value;;
+                        break;
                     default:
                         continue;
                 }
@@ -224,12 +265,12 @@ namespace SatoSim.Core.Data
 
         private static ParserTokens GetTokenType(string tokenValue) => (from token in MetaTokens
             from variation in token.Value
-            where tokenValue == variation
+            where tokenValue.ToUpperInvariant().Replace("_", "") == variation.ToUpperInvariant()
             select token.Key).FirstOrDefault();
         
         private static DifficultyTier GetDifficultyTokenType(string tokenValue) => (from token in MetaTierTokens
             from variation in token.Value
-            where tokenValue == variation
+            where tokenValue.ToUpperInvariant().Replace("_", "") == variation.ToUpperInvariant()
             select token.Key).FirstOrDefault();
     }
 }
