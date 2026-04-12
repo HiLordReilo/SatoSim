@@ -32,6 +32,7 @@ namespace SatoSim.Core.Managers
         public readonly float[] SuspensionTimes;
         public readonly TouchLocation?[] SuspendedSlashTouchLoc;
         public readonly StreamObject[] Streams;
+        public readonly TimingPoint[] TimingPoints;
         
         public int NoteBatchesPassed;
         public int StreamsPassed;
@@ -39,6 +40,7 @@ namespace SatoSim.Core.Managers
         public bool IsPlaying = true;
         public float CurrentBPM;
         public float BeatDuration => 1f / (CurrentBPM / 60f);
+        public float BeatProgress => SecondsToBeats(GameManager.LoadedChart.InitialBPM, Position, TimingPoints) % 1f;
         
         private readonly bool[] _hoveredReceptors;
 
@@ -55,6 +57,7 @@ namespace SatoSim.Core.Managers
             
             List<NoteBatch> nbt = new List<NoteBatch>();
             List<StreamObject> str = new List<StreamObject>();
+            List<TimingPoint> tp = new List<TimingPoint>();
 
             List<ChartData.ChartObject> unprocessedObjects = GameManager.LoadedChart.ChartObjects.ToList();
 
@@ -91,9 +94,18 @@ namespace SatoSim.Core.Managers
                     pointCount += str[^1].Points.Length;
                 }
             }
+            
+            foreach (var ev in GameManager.LoadedChart.ChartEvents)
+            {
+                if (ev.EventType == ChartData.ChartEvent.TYPE_BPMCHANGE)
+                {
+                    tp.Add(new TimingPoint(ev.Time / 1000, ev.Data));
+                }
+            }
 
             NoteBatches = nbt.ToArray();
             Streams = str.ToArray();
+            TimingPoints = tp.ToArray();
             SuspendedNotes = new NoteBatch[8];
             SuspendedJudgments = [-1, -1, -1, -1, -1, -1, -1, -1];
             SuspensionTimes = new float[8];
@@ -306,13 +318,13 @@ namespace SatoSim.Core.Managers
             
             List<Tuple<int, float, float>> activeReceptorDist = new List<Tuple<int, float, float>>();
 
-            Point inputLocation = Game1.ScreenToCanvasSpace(input.Position.ToPoint());
+            Vector2 inputLocation = Game1.ScreenToCanvasSpace(input.Position);
             
             // Loop through all receptors and get the distance between it and the touch location
             // We also check if the tap overlaps the receptor
             for (int i = 0; i < 15; i++)
             {
-                float dist = Vector2.Distance(inputLocation.ToVector2(), GetPlayfieldAnchorPosition(i));
+                float dist = Vector2.Distance(inputLocation, GetPlayfieldAnchorPosition(i));
 
                 bool isCloseEnough = false;
                 float closestTime = NoteBatches[NoteBatchesPassed].Time - Position;
@@ -409,9 +421,9 @@ namespace SatoSim.Core.Managers
             }
         }
 
-        public void ProcessSwipe(Point inputLocation, Vector2 delta)
+        public void ProcessSwipe(Vector2 inputLocation, Vector2 delta)
         {
-            Vector2 prevInputLoc = inputLocation.ToVector2() - delta;
+            Vector2 prevInputLoc = inputLocation - delta;
             float swipeDir = float.Atan2(delta.Y, delta.X);
             //Console.WriteLine(MathHelper.ToDegrees(swipeDirection));
             
@@ -434,7 +446,7 @@ namespace SatoSim.Core.Managers
             }
             
             // Process streams
-            MoveStreams(inputLocation.ToVector2(), prevInputLoc);
+            MoveStreams(inputLocation, prevInputLoc);
         }
 
         public void ProcessRelease(TouchLocation input)
@@ -460,8 +472,8 @@ namespace SatoSim.Core.Managers
 
             input.TryGetPreviousLocation(out var lastLoc);
             // Process streams
-            MoveStreams(Game1.ScreenToCanvasSpace(input.Position.ToPoint()).ToVector2(),
-                Game1.ScreenToCanvasSpace(lastLoc.Position.ToPoint()).ToVector2());
+            MoveStreams(Game1.ScreenToCanvasSpace(input.Position),
+                Game1.ScreenToCanvasSpace(lastLoc.Position));
         }
 
         private void MoveStreams(Vector2 touchPos, Vector2 lastPos)

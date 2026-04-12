@@ -44,5 +44,65 @@
                 _ => "INVALID_JUDGEMENT"
             };
         }
+
+        public struct TimingPoint(float time, float bpm)
+        {
+            public float Time = time;
+            public float SetBpm = bpm;
+        }
+
+        public static float GetBeatsPerSecond(float bpm) => bpm / 60f;
+
+        public static float GetSecondsPerBeat(float bps) => 1f / bps;
+
+        public static float BpmToSecondsPerBeat(float bpm) => GetSecondsPerBeat(GetBeatsPerSecond(bpm));
+
+        public static float BeatsToSeconds(float bpm, float beats) => beats * BpmToSecondsPerBeat(bpm);
+
+        public static float BeatsToSeconds(float initialBpm, float beats, TimingPoint[] bpmChanges = null)
+        {
+            TimingPoint anchor = new TimingPoint(0f, initialBpm);
+            float remainingBeats = beats;
+            float seconds = 0f;
+
+            if (bpmChanges != null)
+                foreach (var tPoint in bpmChanges)
+                {
+                    if (seconds < tPoint.Time || remainingBeats <= 0f) break;
+
+                    seconds += tPoint.Time - anchor.Time;
+                    anchor = tPoint;
+                    remainingBeats -= SecondsToBeats(anchor.SetBpm, anchor.Time);
+                }
+
+            seconds += BeatsToSeconds(anchor.SetBpm, remainingBeats);
+
+            return seconds;
+        }
+
+        public static float SecondsToBeats(float bpm, float seconds) => seconds * GetBeatsPerSecond(bpm);
+
+        public static float SecondsToBeats(float initialBpm, float seconds, TimingPoint[] bpmChanges = null)
+        {
+            TimingPoint anchor = new TimingPoint(0f, initialBpm);
+            float remainingSeconds = seconds;
+            float beats = 0f;
+
+            if (bpmChanges != null)
+                foreach (var tPoint in bpmChanges)
+                {
+                    if (remainingSeconds <= 0f) break;
+
+                    float sectionTime = tPoint.Time - anchor.Time;
+
+                    beats += SecondsToBeats(anchor.SetBpm, sectionTime);
+                    anchor = tPoint;
+                    remainingSeconds -= sectionTime;
+                }
+
+            beats += SecondsToBeats(anchor.SetBpm, remainingSeconds);
+
+            return beats;
+        }
     }
 }

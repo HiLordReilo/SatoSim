@@ -39,6 +39,7 @@ namespace SatoSim.Core.Screens
         
         private Texture2D _tex_octagonReceptor;
         private Texture2D _tex_rippleReceptor;
+        private Texture2D _tex_octagonReceptorPulse;
         private Texture2D _tex_guideLamp;
         private Texture2D _tex_guideArrow;
         private Texture2D _tex_guideArrowTip;
@@ -114,8 +115,8 @@ namespace SatoSim.Core.Screens
             _stateManager.ProcessTap(e.RawTouchLocation);
 
         private void Input_OnTouchMoved(object sender, TouchEventExArgs e) =>
-            _stateManager.ProcessSwipe(Game1.ScreenToCanvasSpace(e.Position),
-                Game1.ScreenToCanvasSpace(e.DistanceMoved.ToPoint()).ToVector2());
+            _stateManager.ProcessSwipe(Game1.ScreenToCanvasSpace(e.Position.ToVector2()),
+                Game1.ScreenToCanvasSpace(e.DistanceMoved));
 
         private void Input_OnTouchEnded(object sender, TouchEventArgs e) => _stateManager.ProcessRelease(e.RawTouchLocation);
                 
@@ -124,6 +125,7 @@ namespace SatoSim.Core.Screens
         {
             _tex_octagonReceptor = Content.Load<Texture2D>("Graphics/Gameplay/Objects/r_Center");
             _tex_rippleReceptor = Content.Load<Texture2D>("Graphics/Gameplay/Objects/r_Ripple");
+            _tex_octagonReceptorPulse = Content.Load<Texture2D>("Graphics/Gameplay/Objects/p_CenterPulse");
             _tex_guideLamp = Content.Load<Texture2D>("Graphics/Gameplay/Objects/g_guideLamp");
             _tex_guideArrow = Content.Load<Texture2D>("Graphics/Gameplay/Objects/g_guideArrow");
             _tex_guideArrowTip = Content.Load<Texture2D>("Graphics/Gameplay/Objects/g_guideArrowTip");
@@ -185,7 +187,8 @@ namespace SatoSim.Core.Screens
             if (_stateManager.IsPlaying &&
                 (_stateManager.Progress >= 1f ||
                  GamePad.GetState(0).IsButtonDown(Buttons.Back) ||
-                 KeyboardExtended.GetState().WasKeyPressed(Keys.Escape)))
+                 KeyboardExtended.GetState().WasKeyPressed(Keys.Escape))
+                && _stateManager.Progress > 0f)
             {
                 _stateManager.IsPlaying = false;
                 _stateManager.FinishPlay(Game, GraphicsDevice);
@@ -277,7 +280,10 @@ namespace SatoSim.Core.Screens
                     _spriteBatch.Draw(_tex_octagonReceptor, GetPlayfieldAnchorPosition(i), null, Color.White,
                         MathHelper.ToRadians(360f / 8f * i), _tex_octagonReceptor.Bounds.Center.ToVector2(),
                         Vector2.One, SpriteEffects.None, 0.3f);
-                    
+                    _spriteBatch.Draw(_tex_octagonReceptorPulse, GetPlayfieldAnchorPosition(i), null,
+                        Color.White * (1f - _stateManager.BeatProgress), MathHelper.ToRadians(360f / 8f * i),
+                        _tex_octagonReceptor.Bounds.Center.ToVector2(), Vector2.One, SpriteEffects.None, 0.31f);
+
                     //_spriteBatch.DrawCircle(GetPlayfieldAnchorPosition(i), ReceptorRadius, 32, Color.Green, 3f, 0.2f);
                 }
 
@@ -442,7 +448,6 @@ namespace SatoSim.Core.Screens
             // Guide indicators
             if (timeToNote <= _stateManager.BeatDuration * 4f)
             {
-
                 // Guide arrow
                 if (note.Position1 is >= 3 and <= 5)
                 {
@@ -782,6 +787,7 @@ namespace SatoSim.Core.Screens
             Vector2 handlePos2;
             float handlePosLerp = stream.PointsPassed % 1f;
             Vector2 handleOriginMultiplier = new Vector2(0.33f, 0.5f);
+            float handleScaleMultiplier = 1f - (stream.PointsPassed / (stream.Points.Length - 1)) * 0.33f;
 
             if (stream.PointsPassed < stream.Points.Length - 1)
             {
@@ -805,16 +811,19 @@ namespace SatoSim.Core.Screens
             _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:BASE"], handlePos, null,
                 Color.White * noteFadeIn * timeOut, handleRot,
                 GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:BASE"].Bounds.Size.ToVector2() *
-                handleOriginMultiplier, Vector2.One * (1.2f - noteFadeIn * 0.2f), SpriteEffects.None, 0.84f);
+                handleOriginMultiplier, Vector2.One * (1.2f - noteFadeIn * 0.2f) * handleScaleMultiplier,
+                SpriteEffects.None, 0.84f);
             _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:CORE"], handlePos, null,
                 Color.White * noteFadeIn * timeOut, handleRot,
                 GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:CORE"].Bounds.Size.ToVector2() *
                 handleOriginMultiplier * new Vector2(coreFadeIn, 1f),
-                Vector2.One * MathHelper.Clamp(noteProgress * coreFadeIn, 0f, 1f), SpriteEffects.None, 0.85f);
+                Vector2.One * MathHelper.Clamp(noteProgress * coreFadeIn, 0f, 1f) * handleScaleMultiplier,
+                SpriteEffects.None, 0.85f);
             _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:OVERLAY"], handlePos, null,
                 Color.White * noteFadeIn * timeOut, handleRot,
                 GlobalAssetManager.GlobalTextures["n_Stream:HANDLE:OVERLAY"].Bounds.Size.ToVector2() *
-                handleOriginMultiplier, Vector2.One * (1.2f - noteFadeIn * 0.2f), SpriteEffects.None, 0.86f);
+                handleOriginMultiplier, Vector2.One * (1.2f - noteFadeIn * 0.2f) * handleScaleMultiplier,
+                SpriteEffects.None, 0.86f);
             
             // Approach triangle
             if (noteProgress <= 1f)

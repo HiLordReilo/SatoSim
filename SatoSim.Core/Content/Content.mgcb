@@ -485,6 +485,18 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Gameplay/Objects/n_tap_Spinner.png;Graphics/Gameplay/Objects/n_tap_Spinner
 
+#begin Graphics/Gameplay/Objects/p_CenterPulse.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/Objects/p_CenterPulse.png;Graphics/Gameplay/Objects/p_CenterPulse
+
 #begin Graphics/Gameplay/Objects/r_Center.png
 /importer:TextureImporter
 /processor:TextureProcessor
