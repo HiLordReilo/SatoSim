@@ -13,6 +13,7 @@ namespace SatoSim.Core.Managers
         public static Texture2D LoadedJacket;
         public static Sound LoadedSong;
         public static PlayerData ActivePlayer = new PlayerData();
+        public static bool Autoplay = false;
         public static bool UseTouch;
     }
 }

@@ -118,6 +118,7 @@ namespace SatoSim.Core.Managers
             Console.WriteLine($"- Stream objects: {Streams.Length}");
             Console.WriteLine($"- Total combo: {noteCount + pointCount}");
             Console.WriteLine($"- Total objects: {noteCount + Streams.Length}");
+            Console.WriteLine($"- Score per object: {1000000f / ((noteCount + Streams.Length))}");
             
             PlayerState = new PlayerState(noteCount, Streams.Length);
         }
@@ -129,6 +130,12 @@ namespace SatoSim.Core.Managers
             // Update hovered receptors
             for (int i = 0; i < 15; i++)
             {
+                if (GameManager.Autoplay)
+                {
+                    _hoveredReceptors[i] = true;
+                    continue;
+                }
+                
                 if (GameManager.UseTouch)
                 {
                     if (Game1.TouchListener.CurrentState.Count == 0)
@@ -194,9 +201,39 @@ namespace SatoSim.Core.Managers
 
                 }
                 
-                // Check if current note batch was missed
                 if(NoteBatchesPassed < NoteBatches.Length)
-                    if (NoteBatches[NoteBatchesPassed].Time - Position < -JUDGE_FINE)
+                {
+                    if (GameManager.Autoplay)
+                    {
+                        if (NoteBatches[NoteBatchesPassed].Time - Position <= 0f)
+                        {
+                            for (int i = 0; i < NoteBatches[NoteBatchesPassed].NoteCount; i++)
+                            {
+                                if (NoteBatches[NoteBatchesPassed].ProcessedNotes[i]) continue;
+
+                                if (NoteBatches[NoteBatchesPassed].Notes[i].HoldFlag)
+                                {
+                                    SuspendedNotes[NoteBatches[NoteBatchesPassed].Notes[i].Position1] = new NoteBatch(NoteBatches[NoteBatchesPassed].Notes[i],
+                                        NoteBatches[NoteBatchesPassed].Color);
+
+                                    SuspendedJudgments[NoteBatches[NoteBatchesPassed].Notes[i].Position1] = JUDGE_ID_FANTASTIC;
+
+                                    SuspensionTimes[NoteBatches[NoteBatchesPassed].Notes[i].Position1] = Position;
+                                }
+                                else
+                                {
+                                    PlayerState.ProcessJudgment(JUDGE_ID_FANTASTIC);
+                                    _scene.TriggerHitEffect(NoteBatches[NoteBatchesPassed].Notes[i].Position1, JUDGE_ID_FANTASTIC,
+                                        NoteBatches[NoteBatchesPassed].Notes[i].ObjectType, Game1.RandomGenerator.NextAngle());
+                                    NoteBatches[NoteBatchesPassed].ProcessedNotes[i] = true;
+                                }
+                            }
+
+                            NoteBatchesPassed++;
+                        }
+                    }
+                    // Check if current note batch was missed
+                    else if (NoteBatches[NoteBatchesPassed].Time - Position < -JUDGE_FINE)
                     {
                         for (int i = 0; i < NoteBatches[NoteBatchesPassed].NoteCount; i++)
                         {
@@ -210,6 +247,7 @@ namespace SatoSim.Core.Managers
 
                         NoteBatchesPassed++;
                     }
+                }
                 
                 // Update streams
                 foreach (StreamObject stream in Streams)
@@ -219,6 +257,18 @@ namespace SatoSim.Core.Managers
                     
                     // Stream is already processed - skip
                     if(stream.IsFinished) continue;
+
+                    if (GameManager.Autoplay && stream.StartTime - Position <= 0f)
+                    {
+                        if (stream.PointsPassed == 0f)
+                        {
+                            PlayerState.ProcessStreamPoint(stream.PointScoreWeight);
+                            stream.PointsPassed += float.Epsilon;
+                        }
+
+                        stream.PointsPassed = float.Max(stream.PointsPassed,
+                            (Position - stream.StartTime) / (stream.EndTime - stream.StartTime) * stream.Points.Length);
+                    }
                     
                     // We process all of unprocessed points
                     for (int i = stream.PointsProcessed; i < stream.Points.Length - 1; i++)

@@ -85,9 +85,12 @@ namespace SatoSim.Core.Screens
         {
             Console.WriteLine("GameplayScreen in");
 
-            Game1.TouchListener.TouchStarted += Input_OnTouchStarted;
-            Game1.TouchListener.TouchMoved += Input_OnTouchMoved;
-            Game1.TouchListener.TouchEnded += Input_OnTouchEnded;
+            if(!GameManager.Autoplay)
+            {
+                Game1.TouchListener.TouchStarted += Input_OnTouchStarted;
+                Game1.TouchListener.TouchMoved += Input_OnTouchMoved;
+                Game1.TouchListener.TouchEnded += Input_OnTouchEnded;
+            }
             
             _songChannel = GameManager.LoadedSong.Play(new ChannelGroup("BGM"), true);
 
@@ -102,13 +105,16 @@ namespace SatoSim.Core.Screens
         {
             Console.WriteLine("GameplayScreen out");
             
+            if(!GameManager.Autoplay)
+            {
+                Game1.TouchListener.TouchStarted -= Input_OnTouchStarted;
+                Game1.TouchListener.TouchMoved -= Input_OnTouchMoved;
+                Game1.TouchListener.TouchEnded -= Input_OnTouchEnded;
+            }
+            
             _songChannel.Stop();
             
             _spriteBatch.Dispose();
-            
-            Game1.TouchListener.TouchStarted -= Input_OnTouchStarted;
-            Game1.TouchListener.TouchMoved -= Input_OnTouchMoved;
-            Game1.TouchListener.TouchEnded -= Input_OnTouchEnded;
         }
 
         private void Input_OnTouchStarted(object sender, TouchEventArgs e) =>

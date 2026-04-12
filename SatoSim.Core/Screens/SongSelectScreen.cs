@@ -69,6 +69,7 @@ namespace SatoSim.Core.Screens
         private Vector2 _pos_listAnchor = new Vector2(200f, 8f);
         private Vector2 _pos_listScrollbar = new Vector2(160f, 128f);
         private Rectangle _pos_startButton;
+        private Rectangle _pos_autoplayToggle;
         private Rectangle _pos_listParenDirButton;
 
         private DynamicSpriteFont _entrySelectionFont;
@@ -139,6 +140,9 @@ namespace SatoSim.Core.Screens
 
             _pos_startButton = _tex_StartButton.Bounds;
             _pos_startButton.Offset(1000, 200);
+
+            _pos_autoplayToggle = new Rectangle(Point.Zero, (_messageFont.MeasureString("Autoplay") + Vector2.One * 16f).ToPoint());
+            _pos_autoplayToggle.Offset(1000, 200 + _tex_StartButton.Height * 1.25f);
             
             _pos_listParenDirButton = _tex_FolderIcon.Bounds;
             _pos_listParenDirButton.Offset(86, 300);
@@ -210,6 +214,10 @@ namespace SatoSim.Core.Screens
                 _manager.StartSong(GraphicsDevice, Game);
                 return;
             }
+            
+            // Autoplay toggle
+            if (_pos_autoplayToggle.Contains(touchPos))
+                GameManager.Autoplay = !GameManager.Autoplay;
             
             // Parent directory button
             if (_pos_listParenDirButton.Contains(touchPos))
@@ -413,6 +421,11 @@ namespace SatoSim.Core.Screens
             // Start button
             _spriteBatch.Draw(_tex_StartButton, _pos_startButton, null, Color.White * (_canStart ? 1f : 0.5f), 0f,
                 Vector2.Zero, SpriteEffects.None, 0.5f);
+            
+            // Autoplay toggle
+            _spriteBatch.DrawRectangle(_pos_autoplayToggle, GameManager.Autoplay ? Color.GreenYellow : Color.Red, 4f);
+            _spriteBatch.DrawString(_messageFont, "Autoplay", _pos_autoplayToggle.Location.ToVector2() + Vector2.One * 8f,
+                new Color(0xFF1B1B1B), layerDepth: 1f);
             
             // Parent directory button
             _spriteBatch.Draw(_tex_FolderIcon, _pos_listParenDirButton, null, Color.Orange, 0f,
