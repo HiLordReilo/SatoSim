@@ -85,6 +85,18 @@ namespace SatoSim.Core.Managers
                     }
                     else if (unprocessedObjects[0].ObjectType == 4)
                     {
+                        // FAILSAFE: If a chart happens to have orphaned stream points, stuff gets wonky.
+                        //           We need to ensure that this point we're checking right now has a parent or
+                        //           a child point. If it does not pass this check, we won't process this object
+                        //           and continue onto the next one.
+                        if (unprocessedObjects[0].ParentID == -1 && unprocessedObjects[0].NextID == -1)
+                        {
+                            Console.WriteLine("Chart processor found orphaned stream point at ID " +
+                                              unprocessedObjects[0].ObjectID);
+                            unprocessedObjects.RemoveAt(0);
+                            continue;
+                        }
+                        
                         str.Add(StreamObject.CreateFreeform(unprocessedObjects[0].ObjectID,
                             ref GameManager.LoadedChart.ChartObjects));
 
