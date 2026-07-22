@@ -146,18 +146,11 @@ namespace SatoSim.Core
                 Content.Load<Texture2D>("Graphics/General/DifficultyRatingFont"), 100, 100,
                 "0123456789-+\u9ED2\u795E\u2605");
             
-            // Load note textures
-            LoadNoteTextures();
-            
-            // Load stream prefabs
-            LoadStreamPrefabs();
-            
-            // TEMPORARY: Build song database from scratch
-            RebuildSongDatabase();
             
             // TEMPORARY: Load temporary options
+            try
             {
-                string[] opts = ["1.7", "0", "0.6", "1", "false", "true", "1.5", "test", "beast.meta"];
+                string[] opts = ["1.7", "0", "0.6", "1", "false", "true", "12", "test", "beast.meta"];
                 
                 string optsPath = Path.Combine(GameManager.GameDirectory, "test_opts.txt");
                 
@@ -166,14 +159,28 @@ namespace SatoSim.Core
                 else 
                     opts = File.ReadAllLines(optsPath);
 
-                GameManager.ActivePlayer.Options["PLAY_NoteSpeed"] = float.Parse(opts[0]);
-                GameManager.ActivePlayer.Options["SOUND_SongOffset"] = float.Parse(opts[1]);
-                GameManager.ActivePlayer.Options["PLAY_BackgroundDim"] = float.Parse(opts[2]);
+                GameManager.ActivePlayer.Options["PLAY_NoteSpeed"] = float.Parse(opts[0], CultureInfo.InvariantCulture);
+                GameManager.ActivePlayer.Options["SOUND_SongOffset"] = float.Parse(opts[1], CultureInfo.InvariantCulture);
+                GameManager.ActivePlayer.Options["PLAY_BackgroundDim"] = float.Parse(opts[2], CultureInfo.InvariantCulture);
                 SettingsManager.ChartPositionMode = (SettingsManager.PositionMode)int.Parse(opts[3]);
                 SettingsManager.ShowFPS = bool.Parse(opts[4]);
                 SettingsManager.Debug_ShowDeviation = bool.Parse(opts[5]);
-                SettingsManager.Debug_StreamInertiaMultiplier = float.Parse(opts[6]);
+                SettingsManager.Debug_StreamInertiaMultiplier = float.Parse(opts[6], CultureInfo.InvariantCulture);
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("Something went wrong while reading test options file: " + e);
+                throw;
+            }
+            
+            // Load note textures
+            LoadNoteTextures();
+            
+            // Load stream prefabs
+            LoadStreamPrefabs();
+            
+            // TEMPORARY: Build song database from scratch
+            RebuildSongDatabase();
             
             // Load base screen
             ScreenManager.ShowScreen(new SongSelectScreen(this), new FadeTransition(GraphicsDevice, Color.White, 2f));
