@@ -178,6 +178,9 @@ public class ChartData
     
     public class ChartEvent
     {
+        public const ushort TYPE_BPMCHANGE = 3;
+        public const ushort TYPE_HIGHTENSION = 5;
+        
         public ushort EventType { get; set; }
         public ushort EventID { get; set; }
         public uint Time { get; set; }

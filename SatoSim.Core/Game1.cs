@@ -166,6 +166,8 @@ namespace SatoSim.Core
                 SettingsManager.ShowFPS = bool.Parse(opts[4]);
                 SettingsManager.Debug_ShowDeviation = bool.Parse(opts[5]);
                 SettingsManager.Debug_StreamInertiaMultiplier = float.Parse(opts[6], CultureInfo.InvariantCulture);
+                GameManager.ActivePlayer.Options["SOUND_HitsoundVolume"] = float.Parse(opts[7]);
+                SettingsManager.Debug_HitsoundsOverridePath = opts[8];
             }
             catch (Exception e)
             {
@@ -175,6 +177,7 @@ namespace SatoSim.Core
             
             // Load note textures
             LoadNoteTextures();
+            LoadHitsounds();
             
             // Load stream prefabs
             LoadStreamPrefabs();

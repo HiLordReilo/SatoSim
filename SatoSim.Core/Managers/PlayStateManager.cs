@@ -35,12 +35,13 @@ namespace SatoSim.Core.Managers
         public readonly TimingPoint[] TimingPoints;
         
         public int NoteBatchesPassed;
+        public NoteBatch CurrentNoteBatch => NoteBatches[NoteBatchesPassed];
         public int StreamsPassed;
 
         public bool IsPlaying = true;
         public float CurrentBPM;
         public float BeatDuration => 1f / (CurrentBPM / 60f);
-        public float BeatProgress => SecondsToBeats(GameManager.LoadedChart.InitialBPM, Position, TimingPoints) % 1f;
+        public float BeatProgress => SecondsToBeats(GameManager.LoadedChart.InitialBPM, Position + _songOffset, TimingPoints) % 1f;
         
         private readonly bool[] _hoveredReceptors;
 
@@ -217,27 +218,27 @@ namespace SatoSim.Core.Managers
                 {
                     if (GameManager.Autoplay)
                     {
-                        if (NoteBatches[NoteBatchesPassed].Time - Position <= 0f)
+                        if (CurrentNoteBatch.Time - Position <= 0f)
                         {
-                            for (int i = 0; i < NoteBatches[NoteBatchesPassed].NoteCount; i++)
+                            for (int i = 0; i < CurrentNoteBatch.NoteCount; i++)
                             {
-                                if (NoteBatches[NoteBatchesPassed].ProcessedNotes[i]) continue;
+                                if (CurrentNoteBatch.ProcessedNotes[i]) continue;
 
-                                if (NoteBatches[NoteBatchesPassed].Notes[i].HoldFlag)
+                                if (CurrentNoteBatch.Notes[i].HoldFlag)
                                 {
-                                    SuspendedNotes[NoteBatches[NoteBatchesPassed].Notes[i].Position1] = new NoteBatch(NoteBatches[NoteBatchesPassed].Notes[i],
-                                        NoteBatches[NoteBatchesPassed].Color);
+                                    SuspendedNotes[CurrentNoteBatch.Notes[i].Position1] = new NoteBatch(CurrentNoteBatch.Notes[i],
+                                        CurrentNoteBatch.Color);
 
-                                    SuspendedJudgments[NoteBatches[NoteBatchesPassed].Notes[i].Position1] = JUDGE_ID_FANTASTIC;
+                                    SuspendedJudgments[CurrentNoteBatch.Notes[i].Position1] = JUDGE_ID_FANTASTIC;
 
-                                    SuspensionTimes[NoteBatches[NoteBatchesPassed].Notes[i].Position1] = Position;
+                                    SuspensionTimes[CurrentNoteBatch.Notes[i].Position1] = Position;
                                 }
                                 else
                                 {
                                     PlayerState.ProcessJudgment(JUDGE_ID_FANTASTIC);
-                                    _scene.TriggerHitEffect(NoteBatches[NoteBatchesPassed].Notes[i].Position1, JUDGE_ID_FANTASTIC,
-                                        NoteBatches[NoteBatchesPassed].Notes[i].ObjectType, Game1.RandomGenerator.NextAngle());
-                                    NoteBatches[NoteBatchesPassed].ProcessedNotes[i] = true;
+                                    _scene.TriggerHitEffect(CurrentNoteBatch.Notes[i].Position1, JUDGE_ID_FANTASTIC,
+                                        CurrentNoteBatch.Notes[i].ObjectType, Game1.RandomGenerator.NextAngle());
+                                    CurrentNoteBatch.ProcessedNotes[i] = true;
                                 }
                             }
 
@@ -245,16 +246,16 @@ namespace SatoSim.Core.Managers
                         }
                     }
                     // Check if current note batch was missed
-                    else if (NoteBatches[NoteBatchesPassed].Time - Position < -JUDGE_FINE)
+                    else if (CurrentNoteBatch.Time - Position < -JUDGE_FINE)
                     {
-                        for (int i = 0; i < NoteBatches[NoteBatchesPassed].NoteCount; i++)
+                        for (int i = 0; i < CurrentNoteBatch.NoteCount; i++)
                         {
-                            if (NoteBatches[NoteBatchesPassed].ProcessedNotes[i]) continue;
+                            if (CurrentNoteBatch.ProcessedNotes[i]) continue;
                             
                             PlayerState.ProcessJudgment(JUDGE_ID_L_MISS);
-                            _scene.TriggerHitEffect(NoteBatches[NoteBatchesPassed].Notes[i].Position1, JUDGE_ID_L_MISS,
-                                NoteBatches[NoteBatchesPassed].Notes[i].ObjectType, 0f);
-                            NoteBatches[NoteBatchesPassed].ProcessedNotes[i] = true;
+                            _scene.TriggerHitEffect(CurrentNoteBatch.Notes[i].Position1, JUDGE_ID_L_MISS,
+                                CurrentNoteBatch.Notes[i].ObjectType, 0f);
+                            CurrentNoteBatch.ProcessedNotes[i] = true;
                         }
 
                         NoteBatchesPassed++;
@@ -376,7 +377,7 @@ namespace SatoSim.Core.Managers
             if(NoteBatchesPassed >= NoteBatches.Length) return;
             
             // Skip processing if the note batch is too far
-            if(NoteBatches[NoteBatchesPassed].Time - Position > JUDGE_MISS) return;
+            if(CurrentNoteBatch.Time - Position > JUDGE_MISS) return;
             
             List<Tuple<int, float, float>> activeReceptorDist = new List<Tuple<int, float, float>>();
 
@@ -389,7 +390,7 @@ namespace SatoSim.Core.Managers
                 float dist = Vector2.Distance(inputLocation, GetPlayfieldAnchorPosition(i));
 
                 bool isCloseEnough = false;
-                float closestTime = NoteBatches[NoteBatchesPassed].Time - Position;
+                float closestTime = CurrentNoteBatch.Time - Position;
                 int batch = NoteBatchesPassed;
                 while (closestTime < JUDGE_MISS)
                 {
@@ -476,7 +477,7 @@ namespace SatoSim.Core.Managers
                     }
                     
                     // If the batch is fully processed now, increase the passed batch counter
-                    if (NoteBatches[NoteBatchesPassed].IsProcessed)
+                    if (CurrentNoteBatch.IsProcessed)
                     {
                         b--; // also reduce this to avoid skipping unprocessed batches
                         NoteBatchesPassed++;
@@ -589,7 +590,9 @@ namespace SatoSim.Core.Managers
         private void ReleaseSuspendedNote(int lane, float hitEffectRotation = 0f)
         {
             PlayerState.AddTimingDeviation(SuspendedNotes[lane].Time - Position);
-            _scene.TriggerHitEffect(lane, SuspendedJudgments[lane], SuspendedNotes[lane].Notes[0].ObjectType, hitEffectRotation);
+            _scene.TriggerHitEffect(lane, SuspendedJudgments[lane], SuspendedNotes[lane].Notes[0].ObjectType,
+                hitEffectRotation);
+            
             PlayerState.ProcessJudgment(SuspendedJudgments[lane]);
             SuspendedJudgments[lane] = -1;
         }
