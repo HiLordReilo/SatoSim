@@ -760,7 +760,7 @@ namespace SatoSim.Core.Managers
                 result.EndTime = result.StartTime + note.Duration / 1000f;
                 
                 Vector2[] simplifiedStream = StreamPrefabs[note.StandardStreamPrefab]
-                    .GetSimplifiedPath(result.EndTime - result.StartTime, beatDuration);
+                    .GetSimplifiedPath(result.EndTime - result.StartTime);
                 
                 for (var i = 0; i < simplifiedStream.Length; i++)
                 {

@@ -429,27 +429,17 @@ namespace SatoSim.Core.Screens
         {
             float rAng = 360f / 8f * note.Position1 + 180f;
             float rRad = MathHelper.ToRadians(rAng) + Single.Pi;
-
-            float speedMult = 300f * _noteSpeed;
-            
             
             float timeToNote = note.ObjectTime / 1000f - _stateManager.Position;
             
-            Vector2 posOffset = Utility.CreateFromAngle(-rAng)
-                                * speedMult
-                                * timeToNote;
-
-            if (timeToNote <= 0) posOffset *= 0.5f;
+            if (timeToNote <= 0) timeToNote *= 0.5f;
             
-            Vector2 position = GetPlayfieldAnchorPosition(note.Position1) + posOffset;
+            Vector2 position = GetPlayfieldAnchorPosition(note.Position1, timeToNote, _noteSpeed);
             
             float noteScale = 0.75f;
             
             // Skip rendering of outside of timing threshold
             if(timeToNote > 3f) return;
-            
-            // DEBUG: Hide notes
-            //if(timeToNote <= -0f) return;
 
             // Guide indicators
             if (timeToNote <= _stateManager.BeatDuration * 4f)
@@ -508,11 +498,9 @@ namespace SatoSim.Core.Screens
                 {
                     float timeToNoteEnd = (note.ObjectTime + note.Duration) / 1000f - _stateManager.Position;
 
-                    Vector2 endPosOffset = Utility.CreateFromAngle(-rAng)
-                                           * speedMult
-                                           * timeToNoteEnd;
-            
-                    Vector2 endPosition = GetPlayfieldAnchorPosition(note.Position1) + endPosOffset;
+                    float speedMult = 300f * _noteSpeed;
+                    
+                    Vector2 endPosition = GetPlayfieldAnchorPosition(note.Position1, timeToNoteEnd, _noteSpeed);
                     
                     Rectangle coreTop = GlobalAssetManager.GlobalTextures["n_Tap:CORE"].Bounds;
                     Rectangle coreBottom = GlobalAssetManager.GlobalTextures["n_Tap:CORE"].Bounds;
@@ -531,8 +519,8 @@ namespace SatoSim.Core.Screens
                     Rectangle bodyOverlay = GlobalAssetManager.GlobalTextures["n_Hold:OVERLAY"].Bounds;
                     Vector2 bodyCoreLength = Vector2.One * noteScale * new Vector2(1f, 1f / (bodyCore.Height * noteScale));
                     Vector2 bodyOverlayLength = Vector2.One * noteScale * new Vector2(1f, 1f / (bodyCore.Height * noteScale));
-                    bodyCoreLength.Y *= (note.Duration / 1000f + (timeToNote <= 0 ? timeToNote * 0.5f : 0)) * speedMult;
-                    bodyOverlayLength.Y *= (note.Duration / 1000f + (timeToNote <= 0 ? timeToNote * 0.5f : 0)) * speedMult;
+                    bodyCoreLength.Y *= Vector2.Distance(position, endPosition);
+                    bodyOverlayLength.Y *= Vector2.Distance(position, endPosition);
                     
                     
                     // Head
@@ -604,22 +592,12 @@ namespace SatoSim.Core.Screens
             float speedMult = 300f * _noteSpeed;
             
             float timeToNote = note.ObjectTime / 1000f - suspensionTime;
-            
-            Vector2 posOffset = Utility.CreateFromAngle(-rAng)
-                                * speedMult
-                                * timeToNote;
-            
             float timeToNoteEnd = (note.ObjectTime + note.Duration) / 1000f - _stateManager.Position;
-            
-            Vector2 endPosOffset = Utility.CreateFromAngle(-rAng)
-                                   * speedMult
-                                   * timeToNoteEnd;
 
-            if (timeToNote <= 0) posOffset *= 0.5f;
+            if (timeToNote <= 0) timeToNote *= 0.5f;
             
-            Vector2 position = GetPlayfieldAnchorPosition(note.Position1) + posOffset;
-            
-            Vector2 endPosition = GetPlayfieldAnchorPosition(note.Position1) + endPosOffset;
+            Vector2 position = GetPlayfieldAnchorPosition(note.Position1, timeToNote, _noteSpeed);
+            Vector2 endPosition = GetPlayfieldAnchorPosition(note.Position1, timeToNoteEnd, _noteSpeed);
             
             float noteScale = 0.75f;
 
@@ -648,8 +626,8 @@ namespace SatoSim.Core.Screens
             Rectangle bodyOverlay = GlobalAssetManager.GlobalTextures["n_Hold:OVERLAY"].Bounds;
             Vector2 bodyCoreLength = Vector2.One * noteScale * new Vector2(1f, 1f / (bodyCore.Height * noteScale));
             Vector2 bodyOverlayLength = Vector2.One * noteScale * new Vector2(1f, 1f / (bodyCore.Height * noteScale));
-            bodyCoreLength.Y *= (timeToNoteEnd - (timeToNote <= 0 ? timeToNote * 0.5f : timeToNote)) * speedMult;
-            bodyOverlayLength.Y *= (timeToNoteEnd - (timeToNote <= 0 ? timeToNote * 0.5f : timeToNote)) * speedMult;
+            bodyCoreLength.Y *= (timeToNoteEnd - timeToNote) * speedMult;
+            bodyOverlayLength.Y *= (timeToNoteEnd - timeToNote) * speedMult;
                     
             // Head
             _spriteBatch.Draw(GlobalAssetManager.GlobalTextures["n_Tap:BASE"],

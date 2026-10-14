@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Microsoft.Xna.Framework;
 
@@ -23,9 +24,8 @@ namespace SatoSim.Core.Utils
         private const int R_OFFSET_RIPPLE_EDGE = 248;
         private const int R_OFFSET_RIPPLE_MIDDLE = 400;
 
-        public static Vector2 GetPlayfieldAnchorPosition(int location)
-        {
-            return location switch
+        public static Vector2 GetPlayfieldAnchorPosition(int location) =>
+            location switch
             {
                 // Center
                 < 8 => // Octagon
@@ -52,8 +52,18 @@ namespace SatoSim.Core.Utils
                 // Invalid location: just put it in the middle of the screen
                 _ => _screenCenter
             };
-        }
-        
+
+        public static Vector2 GetPlayfieldAnchorPosition(int location, float timeToNote, float noteSpeed) =>
+            location switch
+            {
+                // Octagon
+                < 8 => _screenCenter + Utility.CreateFromAngle(360f / 8f * -location + 180f) * R_OFFSET_CENTER
+                                     + Utility.CreateFromAngle(360f / 8f * -location + 180f) * 300f * noteSpeed *
+                                     timeToNote,
+                // The rest is handled by other overload
+                _ => GetPlayfieldAnchorPosition(location),
+            };
+
         public class PrefabStreamPath
         {
             public readonly Vector2[] PointPositions;
@@ -72,20 +82,29 @@ namespace SatoSim.Core.Utils
                 }
             }
 
-            public Vector2[] GetSimplifiedPath(float streamDuration, float beatDuration)
+            public Vector2[] GetSimplifiedPath(float streamDuration)
             {
-                float pointCount = streamDuration / beatDuration * 2;
+                // Find point count
+                // This calculation was vibe-coded because konmai were huffing some hard stuff while coding any of this.
+                // The implementation matches that of an actual game (allegedly), so that should produce the same
+                // point count, meaning we have accurate max combo per chart! Hooray! I hated every bit of this!
+                int ms = (int)MathF.Round(streamDuration * 1000f);
+                int frames = ms * 60 / 1000;
+                int pointCount = (frames % 10 != 0 ? 1 : 0) + 1 + frames / 10;
+                // ok vibe code section over, hopefully no weird edge cases will arise l8r, thx claude
+                
+                Vector2[] result = new Vector2[pointCount];
 
-                Vector2[] result = new Vector2[(int)float.Round(pointCount + 2)];
-
+                // First and last points always match those of the complete 120-point path
                 result[0] = PointPositions[0];
                 result[^1] = PointPositions[^1];
 
-                float pointStep = PointPositions.Length / (1f + pointCount);
+                // Populate the rest of the array
+                float pointStep = PointPositions.Length / (float)(pointCount - 1);
                 
-                for (int i = 1; i < pointCount + 1; i++)
+                for (int i = 1; i < result.Length - 1; i++)
                 {
-                    result[i] = PointPositions[(int)float.Floor(pointStep * i)];
+                    result[i] = PointPositions[(int)float.Round(pointStep * i)];
                 }
 
                 return result;
