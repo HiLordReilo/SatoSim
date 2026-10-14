@@ -101,6 +101,54 @@
 /processorParam:TextureFormat=Color
 /build:Graphics/Gameplay/hud_ComboLabel.png;Graphics/Gameplay/hud_ComboLabel
 
+#begin Graphics/Gameplay/hud_GaugeBack.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_GaugeBack.png;Graphics/Gameplay/hud_GaugeBack
+
+#begin Graphics/Gameplay/hud_GaugeFill.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_GaugeFill.png;Graphics/Gameplay/hud_GaugeFill
+
+#begin Graphics/Gameplay/hud_GaugeFront.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_GaugeFront.png;Graphics/Gameplay/hud_GaugeFront
+
+#begin Graphics/Gameplay/hud_GaugeHandle.png
+/importer:TextureImporter
+/processor:TextureProcessor
+/processorParam:ColorKeyColor=255,0,255,255
+/processorParam:ColorKeyEnabled=True
+/processorParam:GenerateMipmaps=False
+/processorParam:PremultiplyAlpha=True
+/processorParam:ResizeToPowerOfTwo=False
+/processorParam:MakeSquare=False
+/processorParam:TextureFormat=Color
+/build:Graphics/Gameplay/hud_GaugeHandle.png;Graphics/Gameplay/hud_GaugeHandle
+
 #begin Graphics/Gameplay/hud_NoteSpeed.png
 /importer:TextureImporter
 /processor:TextureProcessor
@@ -916,6 +964,13 @@
 /processorParam:MakeSquare=False
 /processorParam:TextureFormat=Color
 /build:Graphics/SongSelect/startButton.png
+
+#begin Shaders/RadialFill.fx
+/importer:EffectImporter
+/processor:EffectProcessor
+/processorParam:DebugMode=Auto
+/processorParam:Defines=
+/build:Shaders/RadialFill.fx
 
 #begin splashes.txt
 /copy:splashes.txt

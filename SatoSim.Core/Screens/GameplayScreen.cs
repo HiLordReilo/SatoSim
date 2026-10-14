@@ -48,12 +48,18 @@ namespace SatoSim.Core.Screens
 
         private Texture2D _tex_HUD_ComboLabel;
         private Texture2D _tex_HUD_ScoreLabel;
+        private Texture2D _tex_HUD_GaugeBack;
+        private Texture2D _tex_HUD_GaugeFront;
+        private Texture2D _tex_HUD_GaugeHandle;
+        private Texture2D _tex_HUD_GaugeFill;
         private Texture2D _tex_HUD_ProgressHead;
         private Texture2D _tex_HUD_NoteSpeedButton;
         private Texture2D _tex_HUD_NoteSpeedButtonUnderlayLocked;
         private Texture2D _tex_HUD_NoteSpeedButtonUnderlayUnlocked;
         
         private Texture2DAtlas _atl_DifficultyLabels;
+
+        private Effect _eff_RadialFill;
 
         private Utility.MonospaceFont _scoreFont;
         private Utility.MonospaceFont _gaugeFont;
@@ -140,6 +146,10 @@ namespace SatoSim.Core.Screens
             
             _tex_HUD_ComboLabel = Content.Load<Texture2D>("Graphics/Gameplay/hud_ComboLabel");
             _tex_HUD_ScoreLabel = Content.Load<Texture2D>("Graphics/Gameplay/hud_ScoreLabel");
+            _tex_HUD_GaugeBack = Content.Load<Texture2D>("Graphics/Gameplay/hud_GaugeBack");
+            _tex_HUD_GaugeFront = Content.Load<Texture2D>("Graphics/Gameplay/hud_GaugeFront");
+            _tex_HUD_GaugeHandle = Content.Load<Texture2D>("Graphics/Gameplay/hud_GaugeHandle");
+            _tex_HUD_GaugeFill = Content.Load<Texture2D>("Graphics/Gameplay/hud_GaugeFill");
             _tex_HUD_ProgressHead = Content.Load<Texture2D>("Graphics/Gameplay/progressHead");
             _tex_HUD_NoteSpeedButton = Content.Load<Texture2D>("Graphics/Gameplay/hud_NoteSpeed");
             _tex_HUD_NoteSpeedButtonUnderlayLocked = Content.Load<Texture2D>("Graphics/Gameplay/hud_NoteSpeedUnderlayLocked");
@@ -147,6 +157,9 @@ namespace SatoSim.Core.Screens
 
             _atl_DifficultyLabels = Texture2DAtlas.Create("TierLabels",
                 Content.Load<Texture2D>("Graphics/Gameplay/DifficultyTierLabels"), 500, 100);
+
+            _eff_RadialFill = Content.Load<Effect>("Shaders/RadialFill");
+            _eff_RadialFill.Parameters["start"].SetValue(0.25f);
             
             _effectManager = new HitEffectManager(_spriteBatch, (bool)GameManager.ActivePlayer.Options["VISUAL_ExtraEffects"],
                 Content.Load<Texture2D>("Graphics/Gameplay/HitEffects/HanteiText"),
@@ -266,16 +279,48 @@ namespace SatoSim.Core.Screens
                     _spriteBatch.Draw(_tex_HUD_ComboLabel, _pos_HUD_ComboLabel, null, Color.White * 0.33f, 0f, Vector2.Zero,
                         Vector2.One * 0.5f, SpriteEffects.None, 1f);
                 }
-                
-                // Gauge
-                string gaugeString = ((int)_stateManager.PlayerState.Gauge).ToString() + '%';
-                Color gaugeCol = _stateManager.PlayerState.Gauge >= 70f ? Color.Magenta : Color.Cyan;
-                
-                _spriteBatch.DrawString(_gaugeFont, gaugeString, _screenCenter - Vector2.UnitY * 76f, gaugeCol,
-                    Vector2.One, Vector2.One, Vector2.One * 16f, -12f, 1f, null);
             }
             _spriteBatch.End();
             
+            // Gauge
+            {
+                string gaugeString = ((int)_stateManager.PlayerState.Gauge).ToString() + '%';
+                Color gaugeCol = _stateManager.PlayerState.Gauge >= 70f ? Color.Magenta : Color.Cyan;
+                float gaugeScale = 1f - _stateManager.BeatProgress * 0.025f;
+                _eff_RadialFill.Parameters["end"].SetValue(_stateManager.PlayerState.Gauge / 100f);
+
+                _spriteBatch.Begin();
+                {
+                    // Gauge underlay
+                    _spriteBatch.Draw(_tex_HUD_GaugeBack, _screenCenter, null, Color.White, 0f,
+                        _tex_HUD_GaugeBack.Bounds.Center.ToVector2(), gaugeScale, SpriteEffects.None, 1f);
+                }
+                _spriteBatch.End();
+
+                _spriteBatch.Begin(blendState: BlendState.Additive, effect: _eff_RadialFill);
+                {
+                    _spriteBatch.Draw(_tex_HUD_GaugeFill, _screenCenter, null, gaugeCol * 0.9f, 0f,
+                        _tex_HUD_GaugeFill.Bounds.Center.ToVector2(), gaugeScale, SpriteEffects.None, 0f);
+                }
+                _spriteBatch.End();
+
+                _spriteBatch.Begin(SpriteSortMode.FrontToBack);
+                {
+                    // Gauge handle
+                    _spriteBatch.Draw(_tex_HUD_GaugeHandle, _screenCenter, null, Color.White,
+                        (_stateManager.PlayerState.Gauge / 100f * float.Pi * 2f),
+                        _tex_HUD_GaugeHandle.Bounds.Center.ToVector2(), gaugeScale, SpriteEffects.None, 0f);
+                    // Gauge overlay
+                    _spriteBatch.Draw(_tex_HUD_GaugeFront, _screenCenter, null, Color.White, 0f,
+                        _tex_HUD_GaugeFront.Bounds.Center.ToVector2(), gaugeScale, SpriteEffects.None, 0f);
+                    // Gauge percentage
+                    _spriteBatch.DrawString(_gaugeFont, gaugeString, _screenCenter - Vector2.UnitY * 76f * gaugeScale,
+                        gaugeCol,
+                        Vector2.One * gaugeScale, Vector2.One * 0.8f, Vector2.One * 16f, -12f, 1f, null);
+                }
+                _spriteBatch.End();
+            }
+
             // Middle layer
             _spriteBatch.Begin(SpriteSortMode.FrontToBack);
             {
